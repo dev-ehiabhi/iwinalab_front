@@ -1,17 +1,11 @@
-<script setup>
-// defineProps({
-//     msg: {
-//         type: String,
-//         required: true
-//     }
-// });
-import section_1_image from '@/assets/images/landing/challenges.png'
-import section_2_image from '@/assets/images/landing/harvest.png'
-import section_3_image from '@/assets/images/landing/guy.png'
+<script setup lang="ts">
+    import section_1_image from '@/assets/images/landing/challenges.png'
+    import section_2_image from '@/assets/images/landing/harvest.png'
+    import section_3_image from '@/assets/images/landing/guy.png'
 </script>
 
 <template>
-    <div class="w-full h-screen bg-no-repeat bg-cover bg-center bg-[url('/images/landing/hero_section.jpg')] ">
+    <div class="w-full h-screen bg-no-repeat bg-cover bg-center bg-[url('/images/landing/hero_section.jpg')]">
         <header class="bg-gray-400 bg-transparent bg-blend-overlay">
             <!-- <img src="" alt="">  -->
             <div class="relative isolate px-6 pt-4 lg:px-8">                

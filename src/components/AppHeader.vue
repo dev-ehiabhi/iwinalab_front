@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import logo from '@/assets/images/general/iwina_logo.png'
 
