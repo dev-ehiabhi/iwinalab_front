@@ -1,19 +1,19 @@
 <script setup>
-import logo from '@/assets/images/general/iwina_logo.png'
+// import logo from '@/assets/images/general/iwina_logo.png'
 </script>
 
 <template>
-    <div class="w-full flex justify-around p-6 lg:p-16 h-screen">
+    <div class="w-full flex justify-around p-6">
         <div class="w-1/2 flex-grow">
             <div class="rounded-lg dark:bg-gray-800">
-                <div class="px-12 py-8">
-                    <div class="flex justify-center mx-auto">
+                <div class="px-12 pt-8">
+                    <!-- <div class="flex justify-center mx-auto">
                         <img class="w-auto h-7 sm:h-8" :src="logo" alt="">
-                    </div>
+                    </div> -->
 
                     <h3 class="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">Welcome Back</h3>
 
-                    <p class="mt-1 text-center text-gray-500 dark:text-gray-400">Login or create account</p>
+                    <p class="mt-1 text-center text-gray-500 dark:text-gray-400">Enter credentials to access account</p>
 
                     <form>
                         <div class="w-full mt-4">
@@ -43,7 +43,7 @@ import logo from '@/assets/images/general/iwina_logo.png'
                 <div class="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700">
                     <span class="text-sm text-gray-600 dark:text-gray-200">Don't have an account? </span>
 
-                    <a href="#" class="mx-2 text-sm font-bold text-lime-500 dark:text-lime-400 hover:underline">Register</a>
+                    <RouterLink to="/register" class="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline">Register</RouterLink>
                 </div>
             </div>
         </div>   
