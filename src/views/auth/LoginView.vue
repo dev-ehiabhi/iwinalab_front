@@ -1,6 +1,39 @@
-<script setup>
-// import logo from '@/assets/images/general/iwina_logo.png'
+<script lang="ts">
+    import { defineComponent } from 'vue'
+    
+    export default defineComponent({
+        name: 'HomeView',
+        data() {
+            return {
+                email: '',
+                password: ''
+            };
+        },
+        
+        methods: {
+            clearForm() {
+                this.email = '',
+                this.password = ''
+            },
+            async loginRequest() {
+                const data = { email: this.email, password: this.password }
+                try {
+                    const response = await this.$axios.post('/login', data)
+                    if (! response) {
+                        throw new Error('Login failed attempt')
+                    }
+                    this.clearForm()
+                    this.$router.push({path: '/register'})
+                } catch (err) {
+                    console.log(err)
+                } finally {
+                    //
+                }
+            },
+        }
+    });
 </script>
+
 
 <template>
     <div class="w-full flex justify-around p-6">
@@ -15,25 +48,25 @@
 
                     <p class="mt-1 text-center text-gray-500 dark:text-gray-400">Enter credentials to access account</p>
 
-                    <form>
+                    <form @submit.prevent="loginRequest()" name="login_form">
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="email" placeholder="Email Address" aria-label="Email Address" />
+                            <input id="email" v-model="email" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="email" placeholder="Email Address" aria-label="Email Address" autocomplete="true" />
                         </div>
 
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="password" placeholder="Password" aria-label="Password" />
+                            <input id="password" v-model="password" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="password" placeholder="Password" aria-label="Password" autocomplete="true" />
                         </div>
 
                         <div class="flex items-center justify-between mt-4">
                             <div>
-                                <input name="remember" type="checkbox" value="Remember" class="text-md text-gray-600 dark:text-gray-200 hover:text-gray-500"/>
+                                <input id="remember" name="remember" type="checkbox" value="Remember" class="text-md text-gray-600 dark:text-gray-200 hover:text-gray-500"/>
                                 <label for="remember" class="ml-3">Remember</label>
                             </div>
                             <a href="#" class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500">Forget Password?</a>
                         </div>
 
                         <div class="py-4">
-                            <button class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50">
+                            <button type="submit" class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50">
                                 Sign In
                             </button>
                         </div>

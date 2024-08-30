@@ -1,11 +1,63 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 
 const register_toggle = ref(true)
 
-const changeRegisterToggle = (val) => {
+const changeRegisterToggle = (val: boolean) => {
     register_toggle.value = val
 };
+
+</script>
+
+<script lang="ts">
+    import { defineComponent } from 'vue'
+    
+    export default defineComponent({
+        name: 'RegisterView',
+        data() {
+            return {
+                first_name: '',
+                last_name: '',
+                email: '',
+                phone: '',
+                password: '',
+                organization: ''
+            };
+        },
+        
+        methods: {
+            clearForm() {
+                this.first_name = '',
+                this.last_name = '',
+                this.email = '',
+                this.phone = '',
+                this.password = '',
+                this.organization = ''
+            },
+            async registerRequest() {
+                const data = { first_name: this.first_name, last_name: this.last_name, email: this.email, phone: this.phone, password: this.password }
+                try {
+                    const response = await this.$axios.post('/user', data)
+                    if (!response) {
+                        throw new Error('Registration failed attempt')
+                    } 
+                    if (!response.data.success) {
+                        console.log(response.data.message)
+                    }                
+                    this.clearForm(),
+                    this.$router.replace({path:'/login'})
+                    console.log(response)                    
+                } catch(err: any) {
+                    if (!err.response) {
+                        console.error('No network')
+                    } 
+                    console.error(err.response)
+                } finally {
+                    //
+                }
+            },
+        }
+    });
 </script>
 
 <template>
@@ -32,77 +84,77 @@ const changeRegisterToggle = (val) => {
                         </button> -->
                     </div>
 
-                    <form v-if="register_toggle">
+                    <form name="farmer" v-if="register_toggle" @submit.prevent="registerRequest()">
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" placeholder="First Name" aria-label="First Name" />
+                            <input id="first_name" v-model="first_name" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" placeholder="First Name" aria-label="First Name" />
                         </div>
 
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" placeholder="Last Name" aria-label="Last Name" />
+                            <input id="last_name" v-model="last_name" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" placeholder="Last Name" aria-label="Last Name" />
                         </div>
 
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="email" placeholder="Email Address" aria-label="Email Address" />
+                            <input id="email" v-model="email" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="email" placeholder="Email Address" aria-label="Email Address" required />
                         </div>
 
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="password" placeholder="Password" aria-label="Password" />
+                            <input id="phone" v-model="phone" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="tel" placeholder="Phone Number" aria-label="Phone" />
                         </div>
 
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="password" placeholder="Password" aria-label="Password" />
+                            <input id="password" v-model="password" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="password" placeholder="Password" aria-label="Password" />
                         </div>
 
                         <div class="flex items-center justify-between mt-4">
                             <div>
-                                <input name="remember" type="checkbox" value="Remember" class="text-md text-gray-600 dark:text-gray-200 hover:text-gray-500"/>
+                                <input id="remember" name="remember" type="checkbox" value="Remember" class="text-md text-gray-600 dark:text-gray-200 hover:text-gray-500"/>
                                 <label for="remember" class="ml-3">By signing up, you agree to our <span class="text-blue-600">Terms of Use</span></label>
                             </div>
                             <!-- <a href="#" class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500">Forget Password?</a> -->
                         </div>
 
                         <div class="py-4">
-                            <button class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50">
+                            <button type="submit" class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50">
                                 Sign Up
                             </button>
                         </div>
                     </form>
 
-                    <form v-else>
+                    <form name="organization" v-else @submit.prevent="registerRequest()">
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" placeholder="First Name" aria-label="First Name" />
+                            <input id="first_name" v-model="first_name" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" placeholder="First Name" aria-label="First Name" />
                         </div>
 
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" placeholder="Last Name" aria-label="Last Name" />
+                            <input id="last_name" v-model="last_name" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" placeholder="Last Name" aria-label="Last Name" />
                         </div>
 
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="email" placeholder="Email Address" aria-label="Email Address" />
+                            <input id="email" v-model="email" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="email" placeholder="Email Address" aria-label="Email Address" required />
                         </div>
 
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="tel" placeholder="Phone Number" aria-label="Phone" min="11" max="15" pattern="[0-9\-\+\(\)\s]+" data-for="phoneNumber" />
+                            <input id="phone" v-model="phone" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="tel" placeholder="Phone Number" aria-label="Phone" min="11" max="15" pattern="[0-9\-\+\(\)\s]+" data-for="phoneNumber" />
                         </div>
 
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" placeholder="Name of Organization" aria-label="Organization" />
+                            <input id="organization" v-model="organization" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" placeholder="Name of Organization" aria-label="Organization" />
                         </div>
 
                         <div class="w-full mt-4">
-                            <input class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="password" placeholder="Password" aria-label="Password" />
+                            <input id="password" v-model="password" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="password" placeholder="Password" aria-label="Password" />
                         </div>
 
                         <div class="flex items-center justify-between mt-4">
                             <div>
-                                <input name="remember" type="checkbox" value="Remember" class="text-md text-gray-600 dark:text-gray-200 hover:text-gray-500"/>
+                                <input id="remember" name="remember" type="checkbox" value="Remember" class="text-md text-gray-600 dark:text-gray-200 hover:text-gray-500"/>
                                 <label for="remember" class="ml-3">By signing up, you agree to our <span class="text-blue-600">Terms of Use</span></label>
                             </div>
                             <!-- <a href="#" class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500">Forget Password?</a> -->
                         </div>
 
                         <div class="py-4">
-                            <button class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50">
+                            <button type="submit" class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50">
                                 Sign Up
                             </button>
                         </div>

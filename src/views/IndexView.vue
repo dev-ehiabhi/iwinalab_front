@@ -5,7 +5,7 @@
 </script>
 
 <template>
-    <div class="w-full h-screen bg-no-repeat bg-cover bg-center bg-[url('/images/landing/hero_section.jpg')]">
+    <div class="w-full h-screen bg-blend-color-burn bg-no-repeat bg-cover bg-center bg-[url('/src/assets/images/landing/hero_section.jpg')]">
         <header class="bg-gray-400 bg-transparent bg-blend-overlay">
             <!-- <img src="" alt="">  -->
             <div class="relative isolate px-6 pt-4 lg:px-8">                
