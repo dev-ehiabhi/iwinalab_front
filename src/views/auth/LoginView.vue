@@ -1,5 +1,6 @@
 <script lang="ts">
     import { defineComponent } from 'vue'
+    import { useLoginStore } from '@/stores/login.store'
     
     export default defineComponent({
         name: 'HomeView',
@@ -16,13 +17,14 @@
                 this.password = ''
             },
             async loginRequest() {
+                const loginStore = useLoginStore()
                 const data = { email: this.email, password: this.password }
+                loginStore.login(data)
                 try {
                     const response = await this.$axios.post('/login', data)
                     if (!response.data.success) {
-                        console.error(response.data.message)
                         throw new Error('Login failed attempt')
-                    }                    
+                    } 
                     this.clearForm()
                     this.$router.push({path: '/dashboard'})
                 } catch (err) {
@@ -48,7 +50,7 @@
                     <h3 class="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">Welcome Back</h3>
 
                     <p class="mt-1 text-center text-gray-500 dark:text-gray-400">Enter credentials to access account</p>
-
+                    
                     <form @submit.prevent="loginRequest()" name="login_form">
                         <div class="w-full mt-4">
                             <input id="email" v-model="email" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="email" placeholder="Email Address" aria-label="Email Address" required autocomplete="true" />

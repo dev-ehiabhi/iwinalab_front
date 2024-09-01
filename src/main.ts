@@ -11,7 +11,7 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(axios, {
-    baseUrl: 'http://localhost:8000/api',
+    baseUrl: 'http://localhost:8000/api/v1',
 })
 
 app.mount('#app')

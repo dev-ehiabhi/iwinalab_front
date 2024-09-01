@@ -1,24 +1,24 @@
 import { defineStore } from "pinia";
 
-export const useLoginStore = defineStore('LoginStore', {    
+export const useLoginStore = defineStore('login', {    
     state: () => ({
         isLoggedIn: false,
         token: ''
     }),
     getters: {
-        loggedInStatus: (state) => !!state.isLoggedIn,
+        getIsLoggedIn: (state) => state.isLoggedIn,
     },
     actions: {
-        async login(login_info: any) {
+        async login(credentials: any) {
             try {
                 // update pinia state
-                console.log(login_info);
-                this.isLoggedIn = login_info.success;
-                // console.log(login_info.data.token);
-                this.token = login_info.data.token;
+                console.log(credentials);
+                this.isLoggedIn = credentials.email;
+                // console.log(credentials.data.token);
+                this.token = credentials.password;
 
                 // store user details and jwt in local storage to keep user logged in between page refreshes
-                localStorage.setItem('token', JSON.stringify(login_info.data.token));
+                localStorage.setItem('token', JSON.stringify(credentials.password));
 
                 // redirect to previous url or default to home page
                 // router.push(this.returnUrl || '/');

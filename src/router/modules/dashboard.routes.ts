@@ -8,10 +8,32 @@ const dashboardRoutes = [
             {
                 path: '',
                 name: 'Dashboard',
-                component: () => import('@/views/dashboard/DashboardView.vue'),
+                component: () => import('@/views/dashboard/DashboardView.vue')
             }
         ],
-    }
+    },
+    {
+        path: '/home',
+        component: AuthLayout,
+        children: [
+            {
+                path: '',
+                name: 'Home',
+                component: () => import('@/views/dashboard/AuthHomeView.vue')
+            }
+        ]
+    },
+    {
+        path: '/profile',
+        component: AuthLayout,
+        children: [
+            {
+                path: '',
+                name: 'Profile',
+                component: () => import('@/views/dashboard/ProfileView.vue')
+            }
+        ]
+    },
 ];
 
 export default dashboardRoutes;
