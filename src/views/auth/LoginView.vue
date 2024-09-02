@@ -1,6 +1,6 @@
 <script lang="ts">
     import { defineComponent } from 'vue'
-    import { useLoginStore } from '@/stores/login.store'
+    import { useLoginStore } from '@/stores/login_store'
     
     export default defineComponent({
         name: 'HomeView',
@@ -18,15 +18,23 @@
             },
             async loginRequest() {
                 const loginStore = useLoginStore()
+
                 const data = { email: this.email, password: this.password }
-                loginStore.login(data)
+                
                 try {
-                    const response = await this.$axios.post('/login', data)
-                    if (!response.data.success) {
-                        throw new Error('Login failed attempt')
-                    } 
-                    this.clearForm()
-                    this.$router.push({path: '/dashboard'})
+                    // const response = await loginStore.login(data)
+                    // const response = await this.$axios.post('/login', data)
+                    await loginStore.loginUser(data)
+                    .then(() => {
+                        if (loginStore.getIsLoggedIn) {
+                            this.$router.push({path: '/dashboard'})
+                        }
+                    })
+                    // if (!response.data.success) {
+                    //     throw new Error('Login failed attempt')
+                    // } 
+                    // this.clearForm()
+                    // this.$router.push({path: '/dashboard'})
                 } catch (err) {
                     console.log(`Some error` + err)
                 } finally {

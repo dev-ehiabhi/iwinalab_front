@@ -11,6 +11,7 @@ const changeRegisterToggle = (val: boolean) => {
 
 <script lang="ts">
     import { defineComponent } from 'vue'
+    import { useLoginStore } from '@/stores/login_store'
     
     export default defineComponent({
         name: 'RegisterView',
@@ -34,24 +35,22 @@ const changeRegisterToggle = (val: boolean) => {
                 this.password = '',
                 this.organization = ''
             },
+
             async registerRequest() {
+                const loginStore = useLoginStore()
+
                 const data = { first_name: this.first_name, last_name: this.last_name, email: this.email, phone: this.phone, password: this.password }
+                
                 try {
-                    const response = await this.$axios.post('/user', data)
-                    if (!response) {
-                        throw new Error('Registration failed attempt')
-                    } 
-                    if (!response.data.success) {
-                        console.log(response.data.message)
-                    }                
-                    this.clearForm(),
-                    this.$router.replace({path:'/login'})
-                    console.log(response)                    
-                } catch(err: any) {
-                    if (!err.response) {
-                        console.error('No network')
-                    } 
-                    console.error(err.response)
+                    await loginStore.registerUser(data)
+                    .then(() => {
+                        if (loginStore.getIsRegistered) {
+                            this.$router.push({path: '/login'})
+                        }
+                    })
+                    
+                } catch (err) {
+                    console.log(`Some error` + err)
                 } finally {
                     //
                 }

@@ -10,4 +10,26 @@ const router = createRouter({
     ]
 })
 
+
+// router.beforeEach((to, from, next) => {
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//         if (store.getters['authModule/authenticatedStatus']) {
+//             return next()
+//         } else {
+//             return next({path: '/'})
+//         }
+//     } 
+
+//     if (!to.matched.some(record => record.meta.requiresAuth)) {
+//         if (store.getters['authModule/authenticatedStatus']) {
+//             return next(false)
+//         } else {
+//             return next()
+//         }
+//     }
+
+// })
+
+
+
 export default router;

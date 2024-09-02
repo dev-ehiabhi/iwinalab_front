@@ -6,7 +6,7 @@ import AppAside from '@/components/AppAside.vue'
 
 <template>
     <div class="relative w-full">
-        <AuthAppHeader/>
+        <AuthAppHeader />
         
         <div class="relative w-full flex flex-row justify-between">
             <div class="relative w-[30%] lg:w-[25%]">
@@ -14,7 +14,7 @@ import AppAside from '@/components/AppAside.vue'
             </div>
 
             <main class="relative flex-grow p-8">
-                <router-view/>
+                <router-view />
             </main>
         </div>
     </div>    
