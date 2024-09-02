@@ -12,6 +12,19 @@ const changeRegisterToggle = (val: boolean) => {
 <script lang="ts">
     import { defineComponent } from 'vue'
     import { useLoginStore } from '@/stores/login_store'
+    import Swal from 'sweetalert2'
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
     
     export default defineComponent({
         name: 'RegisterView',
@@ -45,12 +58,17 @@ const changeRegisterToggle = (val: boolean) => {
                     await loginStore.registerUser(data)
                     .then(() => {
                         if (loginStore.getIsRegistered) {
+                            Toast.fire({
+                                icon: "success",
+                                title: "Account created successfully!"
+                            });
+                            this.clearForm()
                             this.$router.push({path: '/login'})
                         }
                     })
                     
                 } catch (err) {
-                    console.log(`Some error` + err)
+                    console.log(`Some error ` + err)
                 } finally {
                     //
                 }
