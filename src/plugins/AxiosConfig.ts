@@ -1,4 +1,4 @@
-import { useLoginStore } from '@/stores/login_store'
+import { useAuthStore } from '@/stores/auth_store'
 import axios from 'axios'
 import router from '@/router'
 
@@ -15,7 +15,7 @@ const AxiosConfig = axios.create({
 
 
 AxiosConfig.interceptors.request.use(config => {
-    const loginStore = useLoginStore()
+    const loginStore = useAuthStore()
     config.headers.Authorization = `Bearer ${loginStore.getToken}` || null
     return config;
 })

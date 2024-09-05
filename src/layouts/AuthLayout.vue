@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import AuthAppHeader from '@/components/AuthAppHeader.vue'
-import AppAside from '@/components/AppAside.vue'
-
+import AuthAppHeader from "@/components/AuthAppHeader.vue";
+import AppAside from "@/components/AppAside.vue";
 </script>
 
 <template>
-    <div class="relative w-full">
-        <AuthAppHeader />
-        
-        <div class="relative w-full flex flex-row justify-between">
-            <div class="relative w-[30%] lg:w-[25%]">
-                <AppAside />
-            </div>
+	<div class="relative w-full">
+		<AuthAppHeader />
 
-            <main class="relative flex-grow p-8">
-                <router-view />
-            </main>
-        </div>
-    </div>    
+		<!-- <div class="relative w-full flex flex-row justify-between"> -->
+		<div class="relative w-full grid grid-cols-12 justify-between">
+			<div class="relative col-start-1 col-end-4">
+				<AppAside />
+			</div>
 
-    <!-- <AuthAppFooter/> -->
+			<main class="relative bg-gray-50 col-start-4 col-end-13 p-8">
+				<router-view />
+			</main>
+		</div>
+	</div>
+
+	<!-- <AuthAppFooter/> -->
 </template>

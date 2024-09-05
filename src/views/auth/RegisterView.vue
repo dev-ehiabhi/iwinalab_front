@@ -11,7 +11,7 @@ const changeRegisterToggle = (val: boolean) => {
 
 <script lang="ts">
     import { defineComponent } from 'vue'
-    import { useLoginStore } from '@/stores/login_store'
+    import { useAuthStore } from '@/stores/auth_store'
     import Swal from 'sweetalert2'
 
     const Toast = Swal.mixin({
@@ -50,17 +50,17 @@ const changeRegisterToggle = (val: boolean) => {
             },
 
             async registerRequest() {
-                const loginStore = useLoginStore()
+                const authStore = useAuthStore()
 
                 const data = { first_name: this.first_name, last_name: this.last_name, email: this.email, phone: this.phone, password: this.password }
                 
                 try {
-                    await loginStore.registerUser(data)
+                    await authStore.registerUser(data)
                     .then(() => {
-                        if (loginStore.getIsRegistered) {
+                        if (authStore.getIsSuccessful) {
                             Toast.fire({
                                 icon: "success",
-                                title: "Account created successfully!"
+                                title: authStore.getResponseMessage
                             });
                             this.clearForm()
                             this.$router.push({path: '/login'})
@@ -131,7 +131,7 @@ const changeRegisterToggle = (val: boolean) => {
                         </div>
 
                         <div class="py-4">
-                            <button type="submit" class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50">
+                            <button type="submit" :class="useAuthStore.getIsLoading ? 'disabled' : 'enable'" class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50">
                                 Sign Up
                             </button>
                         </div>
