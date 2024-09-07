@@ -29,8 +29,12 @@ export const useAuthStore = defineStore("useAuthStore", {
 		getToken: (state) => state.token || localStorage.getItem("token"),
 		getResponseMessage: (state) => state.responseMessage,
 		getUser: (state) => state.user,
-		getFirstName: localStorage.getItem("firstName"),
-		getLastName: localStorage.getItem("lastName"),
+		getFirstName(): string | any {
+			return localStorage.getItem("firstName");
+		},
+		getLastName(): string | any {
+			return localStorage.getItem("lastName");
+		},
 	},
 	actions: {
 		async registerUser(credentials: any) {
@@ -58,11 +62,11 @@ export const useAuthStore = defineStore("useAuthStore", {
 				this.user = response.data.data.user;
 				localStorage.setItem(
 					"firstName",
-					JSON.stringify(response.data.data.user.first_name)
+					response.data.data.user.first_name
 				);
 				localStorage.setItem(
 					"lastName",
-					JSON.stringify(response.data.data.user.last_name)
+					response.data.data.user.last_name
 				);
 				this.responseMessage = response.data.message;
 				// showTooltip(`Welcome back ${this.userData.name}!`)

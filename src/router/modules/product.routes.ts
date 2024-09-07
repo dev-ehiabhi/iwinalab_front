@@ -6,15 +6,9 @@ const productRoutes = [
 		component: AuthLayout,
 		children: [
 			{
-				path: "/products-list",
-				name: "ProductList",
-				component: () => import("@/views/products/ProductList.vue"),
-				meta: { requiresAuth: true },
-			},
-			{
-				path: "details",
-				name: "ProductDetails",
-				component: () => import("@/views/products/ProductDetails.vue"),
+				path: "",
+				name: "Marketplace",
+				component: () => import("@/views/products/MarketPlace.vue"),
 				meta: { requiresAuth: true },
 			},
 		],
@@ -24,13 +18,19 @@ const productRoutes = [
 		component: AuthLayout,
 		children: [
 			{
-				path: "/create-product",
+				path: "products-list",
+				name: "ProductList",
+				component: () => import("@/views/products/ProductList.vue"),
+				meta: { requiresAuth: true },
+			},
+			{
+				path: "create-product",
 				name: "CreateProduct",
 				component: () => import("@/views/products/ProductCreate.vue"),
 				meta: { requiredAuth: true },
 			},
 			{
-				path: "/product-details",
+				path: "product-details",
 				name: "ProductDetails",
 				component: () => import("@/views/products/ProductDetails.vue"),
 				meta: { requiredAuth: true },

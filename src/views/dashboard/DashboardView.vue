@@ -38,7 +38,9 @@ export default defineComponent({
 		<!-- breadcrumb end -->
 
 		<div class="w-full md:flex justify-between items-center mb-6">
-			<p class="text-2xl font-semibold mb-2 lg:mb-0">Welcome, John!</p>
+			<p class="text-2xl font-semibold mb-2 lg:mb-0">
+				Welcome, {{ auth_store.getFirstName }}!
+			</p>
 			<button
 				class="bg-blue-500 hover:bg-blue-600 focus:outline-none rounded-lg px-6 py-2 text-white font-semibold shadow"
 			>

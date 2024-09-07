@@ -173,7 +173,7 @@ export default defineComponent({
 				</RouterLink>
 
 				<RouterLink
-					to="/marketplace/products-list"
+					to="/marketplace"
 					class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
 				>
 					<svg
@@ -295,8 +295,8 @@ export default defineComponent({
 						/>
 						<span
 							class="text-sm font-medium text-gray-700 dark:text-gray-200"
-							>{{ auth_store.user.first_name }}
-							{{ auth_store.user.last_name }}</span
+							>{{ auth_store.getFirstName }}
+							{{ auth_store.getLastName }}</span
 						>
 					</a>
 

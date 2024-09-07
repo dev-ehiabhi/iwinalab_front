@@ -55,7 +55,7 @@ import BreadCrumb from "@/components/BreadCrumb.vue";
 						/>
 					</div>
 					<RouterLink
-						to="{name: CreateProduct}"
+						to="/products/create-product"
 						type="button"
 						class="px-6 py-2 font-semibold rounded bg-lime-600 text-gray-50"
 					>
