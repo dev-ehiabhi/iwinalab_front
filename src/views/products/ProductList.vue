@@ -59,7 +59,8 @@ import BreadCrumb from "@/components/BreadCrumb.vue";
 						type="button"
 						class="px-6 py-2 font-semibold rounded bg-lime-600 text-gray-50"
 					>
-						Add New Product
+						Add
+						<span class="hidden lg:inline-flex">New</span> Product
 					</RouterLink>
 				</div>
 			</div>

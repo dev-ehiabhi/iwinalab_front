@@ -60,6 +60,7 @@ export const useAuthStore = defineStore("useAuthStore", {
 				this.isAuthenticated = response.data.success;
 				localStorage.setItem("loggedin", response.data.success);
 				this.user = response.data.data.user;
+				localStorage.setItem("userId", response.data.data.user.id);
 				localStorage.setItem(
 					"firstName",
 					response.data.data.user.first_name
@@ -83,6 +84,7 @@ export const useAuthStore = defineStore("useAuthStore", {
 				this.isSuccessful = response.data.success;
 				this.isAuthenticated = false;
 				this.responseMessage = response.data.message;
+				localStorage.clear();
 			} catch (error) {
 				return error;
 			}

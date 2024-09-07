@@ -5,14 +5,14 @@ const api = ProductApis;
 
 export const useProductStore = defineStore("ProductStore", {
 	state: () => ({
-		isCreated: false,
+		isSuccessful: false,
 		products: {},
-		categories: {},
+		// categories: {},
 	}),
 	getters: {
-		getIsCreated: (state) => !!state.isCreated,
+		getIsSuccessful: (state) => !!state.isSuccessful,
 		getProducts: (state) => !!state.products,
-		getCategories: (state) => !!state.categories,
+		// getCategories: (state) => !!state.categories,
 	},
 	actions: {
 		async fetchtProducts() {
@@ -24,19 +24,19 @@ export const useProductStore = defineStore("ProductStore", {
 			}
 		},
 
-		async fetchCategories() {
-			try {
-				const response = await api.getCategories();
-				this.categories = response.data.data;
-			} catch (error) {
-				return error;
-			}
-		},
+		// async fetchCategories() {
+		// 	try {
+		// 		const response = await api.getCategories();
+		// 		this.categories = response.data.data;
+		// 	} catch (error) {
+		// 		return error;
+		// 	}
+		// },
 
 		async createProduct(credentials: any) {
 			try {
 				const response = await api.createProduct(credentials);
-				this.isCreated = response.data.success;
+				this.isSuccessful = response.data.success;
 			} catch (error) {
 				return error;
 			}
@@ -45,7 +45,7 @@ export const useProductStore = defineStore("ProductStore", {
 		async updateProduct(credentials: any) {
 			try {
 				const response = await api.updateProduct(credentials);
-				this.isCreated = response.data.success;
+				this.isSuccessful = response.data.success;
 			} catch (error) {
 				return error;
 			}

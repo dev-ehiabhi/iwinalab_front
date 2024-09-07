@@ -2,9 +2,11 @@
 import { onMounted, ref } from "vue";
 import { useCategoryStore } from "@/stores/modules/category.store";
 import BreadCrumb from "@/components/BreadCrumb.vue";
+import { useProductStore } from "@/stores/modules/product.store";
 // import LoadingIndicator from "@/components/LoadingIndicator.vue";
 
 const categoryStore = useCategoryStore();
+const productStore = useProductStore();
 
 categoryStore.fetchCategories();
 
@@ -12,13 +14,29 @@ onMounted(async () => {
 	await categoryStore.getCategories;
 });
 
+let product_image = ref({});
+
+const selectImage = (event: any) => {
+	product_image.value = event.target.files[0];
+};
+
 const category_id = ref("");
-const product_name = ref("");
+const name = ref("");
 const price = ref(0);
 const description = ref("");
-const product_image = ref("");
 
-const createProduct = () => {};
+const createProduct = () => {
+	const data = {
+		category_id: category_id.value,
+		name: name.value,
+		description: description.value,
+		price: price.value,
+		product_image: product_image.value,
+		user_id: localStorage.getItem("userId"),
+	};
+
+	productStore.createProduct(data);
+};
 </script>
 
 <template>
@@ -36,16 +54,22 @@ const createProduct = () => {};
 				@submit.prevent="createProduct()"
 				class="w-full"
 			>
-				<fieldset class="w-full space-y-1 text-gray-500">
-					<label for="files" class="block text-sm font-normal py-4">
+				<fieldset class="w-full border space-y-1 text-gray-500">
+					<label
+						for="files"
+						class="block text-center text-sm font-normal pt-8"
+					>
 						Upload Product Image
 					</label>
+
 					<div class="flex w-full">
 						<input
 							type="file"
 							name="files"
 							id="files"
-							class="w-full px-8 py-12 border rounded-md text-gray-600"
+							accept="image/*"
+							@change="(event) => selectImage(event)"
+							class="w-full text-center px-8 py-8 rounded-md text-gray-600"
 						/>
 					</div>
 				</fieldset>
@@ -58,13 +82,14 @@ const createProduct = () => {};
 							v-model="category_id"
 							class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-slate-400 focus:ring-slate-300 focus:ring-opacity-40 dark:focus:border-slate-300 focus:outline-none focus:ring"
 						>
-							<option disabled>Select Product Category</option>
+							<option selected>Select Product Category</option>
 							<option
 								v-for="(
 									category, index
 								) in categoryStore.getCategories"
 								:key="index"
 								:value="category.id"
+								class="bg-slate-100 text-gray-400"
 							>
 								{{ category.name }}
 							</option>
@@ -73,8 +98,8 @@ const createProduct = () => {};
 
 					<div>
 						<input
-							v-model="product_name"
-							id="product_name"
+							v-model="name"
+							id="name"
 							type="text"
 							placeholder="Product Name"
 							class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-slate-400 focus:ring-slate-300 focus:ring-opacity-40 dark:focus:border-slate-300 focus:outline-none focus:ring"
@@ -96,7 +121,7 @@ const createProduct = () => {};
 									id="price"
 									type="number"
 									placeholder="Price"
-									class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-l-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-slate-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+									class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-l-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-slate-400 focus:ring-gray-300 focus:ring-opacity-40 dark:focus:border-gray-300 focus:outline-none focus:ring"
 								/>
 								<span
 									class="flex items-center px-3 pointer-events-none sm:text-sm rounded-r-md bg-gray-300"
