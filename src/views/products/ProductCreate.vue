@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 import { useCategoryStore } from "@/stores/modules/category.store";
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import { useProductStore } from "@/stores/modules/product.store";
+// import Swal from "sweetalert2";
 // import LoadingIndicator from "@/components/LoadingIndicator.vue";
 
 const categoryStore = useCategoryStore();
@@ -14,7 +15,9 @@ onMounted(async () => {
 	await categoryStore.getCategories;
 });
 
-let product_image = ref({});
+//
+
+let product_image = ref(null);
 
 const selectImage = (event: any) => {
 	product_image.value = event.target.files[0];
@@ -25,7 +28,7 @@ const name = ref("");
 const price = ref(0);
 const description = ref("");
 
-const createProduct = () => {
+const createProduct = async () => {
 	const data = {
 		category_id: category_id.value,
 		name: name.value,
@@ -35,8 +38,76 @@ const createProduct = () => {
 		user_id: localStorage.getItem("userId"),
 	};
 
-	productStore.createProduct(data);
+	await productStore.createProduct(data).then(() => {
+		if (productStore.getIsSuccessful) {
+			Toast.fire({
+				icon: "success",
+				title: productStore.getResponseMessage,
+			});
+
+			this.$router.push({ path: "/products/product-list" });
+		}
+	});
 };
+</script>
+
+<script lang="ts">
+// import { defineComponent } from "vue";
+// import { useProductStore } from "@/stores/modules/product.store";
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+	toast: true,
+	position: "top-end",
+	showConfirmButton: false,
+	timer: 3000,
+	timerProgressBar: true,
+	didOpen: (toast) => {
+		toast.onmouseenter = Swal.stopTimer;
+		toast.onmouseleave = Swal.resumeTimer;
+	},
+});
+
+// export default defineComponent({
+// name: "ProductCreate",
+// data() {
+// 	return {
+// 		name: "",
+// 		price: "",
+// 		description: "",
+// 		category_id: "",
+// 		user_id: "",
+// 	};
+// },
+
+// methods: {
+// async createProduct() {
+// const productStore = useProductStore();
+// const data = {
+// 	name: this.name,
+// 	price: this.price,
+// 	description: this.description,
+// 	category_id: this.category_id,
+// 	user_id: localStorage.getItem("userId"),
+// };
+// try {
+// await productStore.createProduct(data).then(() => {
+// 	if (productStore.getIsSuccessful) {
+// 		Toast.fire({
+// 			icon: "success",
+// 			title: productStore.getResponseMessage,
+// 		});
+// 		this.$router.push({ path: "/products/products-list" });
+// 	}
+// });
+// } catch (err) {
+// 	console.log(`Some error ` + err);
+// } finally {
+//
+//}
+// },
+// },
+// });
 </script>
 
 <template>
@@ -48,12 +119,7 @@ const createProduct = () => {
 
 			<p class="text-lg text-gray-500 p-4">File the form below</p>
 
-			<form
-				id="product"
-				name=""
-				@submit.prevent="createProduct()"
-				class="w-full"
-			>
+			<form id="product" @submit.prevent="createProduct()" class="w-full">
 				<fieldset class="w-full border space-y-1 text-gray-500">
 					<label
 						for="files"

@@ -7,18 +7,23 @@ export const useProductStore = defineStore("ProductStore", {
 	state: () => ({
 		isSuccessful: false,
 		products: {},
-		// categories: {},
+		responseMessage: "",
 	}),
 	getters: {
 		getIsSuccessful: (state) => !!state.isSuccessful,
-		getProducts: (state) => !!state.products,
-		// getCategories: (state) => !!state.categories,
+		getProducts() {
+			return this.products;
+		},
+		getResponseMessage: (state) => !!state.responseMessage,
 	},
 	actions: {
-		async fetchtProducts() {
+		async fetchProducts() {
+			this.isSuccessful = false;
 			try {
 				const response = await api.getProducts();
+				this.isSuccessful = response.data.success;
 				this.products = response.data.data;
+				this.responseMessage = response.data.message;
 			} catch (error) {
 				return error;
 			}
@@ -33,16 +38,18 @@ export const useProductStore = defineStore("ProductStore", {
 		// 	}
 		// },
 
-		async createProduct(credentials: any) {
+		async createProduct(credentials) {
+			this.isSuccessful = false;
 			try {
 				const response = await api.createProduct(credentials);
 				this.isSuccessful = response.data.success;
+				this.responseMessage = response.data.message;
 			} catch (error) {
 				return error;
 			}
 		},
 
-		async updateProduct(credentials: any) {
+		async updateProduct(credentials) {
 			try {
 				const response = await api.updateProduct(credentials);
 				this.isSuccessful = response.data.success;

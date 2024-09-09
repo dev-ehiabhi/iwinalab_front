@@ -1,11 +1,11 @@
 import axios from "@/plugins/AxiosConfig";
 
 export default {
-	createProduct(data: any) {
+	createProduct(data) {
 		return axios.post("/products", data);
 	},
 
-	updateProduct(data: any) {
+	updateProduct(data) {
 		return axios.put("/products", data);
 	},
 
@@ -13,11 +13,11 @@ export default {
 		return axios.get("/products");
 	},
 
-	showProduct(id: string) {
+	showProduct(id) {
 		return axios.get("/products" + id);
 	},
 
-	deleteProduct(id: string) {
+	deleteProduct(id) {
 		return axios.delete("/products" + id);
 	},
 

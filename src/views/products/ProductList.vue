@@ -1,5 +1,15 @@
 <script setup lang="ts">
 import BreadCrumb from "@/components/BreadCrumb.vue";
+import { onMounted, ref } from "vue";
+import { useProductStore } from "@/stores/modules/product.store";
+
+const productStore = useProductStore();
+
+productStore.fetchProducts();
+
+onMounted(async () => {
+	await productStore.getProducts;
+});
 </script>
 
 <template>
@@ -66,15 +76,38 @@ import BreadCrumb from "@/components/BreadCrumb.vue";
 			</div>
 		</header>
 
-		<div class="bg-white h-screen w-full border my-8 rounded-lg">
+		<section
+			class="text-gray-600 body-font bg-white h-full w-full border my-8 rounded-lg"
+		>
 			<p class="text-2xl font-semibold p-4">Products</p>
-
-			<div>
-				<img src="" alt="" />
-				<div></div>
-				<div></div>
-				<div></div>
+			<div class="px-5 mx-auto">
+				<div class="flex flex-wrap -m-4">
+					<div
+						v-for="(product, index) in productStore.getProducts"
+						:key="index"
+						class="lg:w-1/4 md:w-1/2 p-4 w-full"
+					>
+						<a class="block relative h-48 rounded overflow-hidden">
+							<img
+								alt="product"
+								class="object-cover object-center w-full h-full block"
+								src="https://iwinalab.s3.af-south-1.amazonaws.com/africa_dishes.jpg"
+							/>
+						</a>
+						<div class="mt-4">
+							<h3
+								class="text-gray-500 text-md tracking-widest title-font mb-1"
+							>
+								{{ product.name }}
+							</h3>
+							<h2 class="text-gray-600 title-font text-sm">
+								{{ product.description }}
+							</h2>
+							<p class="mt-1">N {{ product.price }}</p>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
+		</section>
 	</div>
 </template>

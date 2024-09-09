@@ -22,7 +22,7 @@ export const useDashboardStore = defineStore("DashboardStore", {
 			}
 		},
 
-		async createProduct(credentials: any) {
+		async createProduct(credentials) {
 			try {
 				const response = await api.createProduct(credentials);
 				this.isSuccessful = response.data.success;
@@ -31,7 +31,7 @@ export const useDashboardStore = defineStore("DashboardStore", {
 			}
 		},
 
-		async updateProduct(credentials: any) {
+		async updateProduct(credentials) {
 			try {
 				const response = await api.updateProduct(credentials);
 				this.isSuccessful = response.data.success;

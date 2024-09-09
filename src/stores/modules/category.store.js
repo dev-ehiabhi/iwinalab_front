@@ -11,7 +11,7 @@ export const useCategoryStore = defineStore("CategoryStore", {
 
 	getters: {
 		getIsSuccessful: (state) => !!state.isSuccessful,
-		getCategories(): object {
+		getCategories() {
 			return this.categories;
 		},
 	},

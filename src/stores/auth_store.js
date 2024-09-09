@@ -3,17 +3,17 @@ import AuthApis from "@/services/apis/AuthApis";
 
 const api = AuthApis;
 
-interface State {
-	isLoading: boolean;
-	isSuccessful: boolean;
-	isAuthenticated: boolean;
-	token: string | null;
-	responseMessage: string;
-	user: Object;
-}
+// interface State {
+// 	isLoading: boolean;
+// 	isSuccessful: boolean;
+// 	isAuthenticated: boolean;
+// 	token: string | null;
+// 	responseMessage: string;
+// 	user: Object;
+// }
 
 export const useAuthStore = defineStore("useAuthStore", {
-	state: (): State => ({
+	state: () => ({
 		isLoading: false,
 		isSuccessful: false,
 		isAuthenticated: false,
@@ -29,15 +29,15 @@ export const useAuthStore = defineStore("useAuthStore", {
 		getToken: (state) => state.token || localStorage.getItem("token"),
 		getResponseMessage: (state) => state.responseMessage,
 		getUser: (state) => state.user,
-		getFirstName(): string | any {
+		getFirstName() {
 			return localStorage.getItem("firstName");
 		},
-		getLastName(): string | any {
+		getLastName() {
 			return localStorage.getItem("lastName");
 		},
 	},
 	actions: {
-		async registerUser(credentials: any) {
+		async registerUser(credentials) {
 			try {
 				const response = await api.registerUser(credentials);
 				this.isSuccessful = response.data.success;
@@ -50,7 +50,7 @@ export const useAuthStore = defineStore("useAuthStore", {
 			}
 		},
 
-		async loginUser(credentials: any) {
+		async loginUser(credentials) {
 			this.responseMessage = "";
 			try {
 				const response = await api.loginUser(credentials);

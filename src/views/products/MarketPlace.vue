@@ -1,4 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from "vue";
+import { useProductStore } from "@/stores/modules/product.store";
+
+const productStore = useProductStore();
+
+productStore.fetchProducts();
+
+onMounted(async () => {
+	await productStore.getProducts;
+});
+</script>
 
 <template>
 	<div class="w-full">
@@ -221,7 +232,12 @@
 								<tbody
 									class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900"
 								>
-									<tr>
+									<tr
+										v-for="(
+											product, index
+										) in productStore.getProducts"
+										:key="index"
+									>
 										<td
 											class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap"
 										>
@@ -245,7 +261,7 @@
 														<h2
 															class="font-medium text-gray-800 dark:text-white"
 														>
-															Arthur Melo
+															{{ product.name }}
 														</h2>
 														<!-- <p
 															class="text-sm font-normal text-gray-600 dark:text-gray-400"
@@ -267,7 +283,7 @@
 												></span> -->
 
 												<h2 class="text-sm font-normal">
-													503500
+													{{ product.price }}
 												</h2>
 											</div>
 										</td>
