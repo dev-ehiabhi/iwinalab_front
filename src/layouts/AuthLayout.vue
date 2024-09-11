@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import AuthAppHeader from "@/components/AuthAppHeader.vue";
 import AppAside from "@/components/AppAside.vue";
 </script>

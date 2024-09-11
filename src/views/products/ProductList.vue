@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import { onMounted, ref } from "vue";
 import { useProductStore } from "@/stores/modules/product.store";
@@ -87,20 +87,25 @@ onMounted(async () => {
 						:key="index"
 						class="lg:w-1/4 md:w-1/2 p-4 w-full"
 					>
-						<a class="block relative h-48 rounded overflow-hidden">
+						<RouterLink
+							to="{{product.id}}"
+							class="block relative h-48 rounded overflow-hidden"
+						>
 							<img
 								alt="product"
 								class="object-cover object-center w-full h-full block"
-								src="https://iwinalab.s3.af-south-1.amazonaws.com/africa_dishes.jpg"
+								:src="product.product_image"
 							/>
-						</a>
+						</RouterLink>
 						<div class="mt-4">
 							<h3
 								class="text-gray-500 text-md tracking-widest title-font mb-1"
 							>
 								{{ product.name }}
 							</h3>
-							<h2 class="text-gray-600 title-font text-sm">
+							<h2
+								class="text-gray-600 title-font text-sm line-clamp-3"
+							>
 								{{ product.description }}
 							</h2>
 							<p class="mt-1">N {{ product.price }}</p>

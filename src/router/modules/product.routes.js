@@ -30,7 +30,7 @@ const productRoutes = [
 				meta: { requiredAuth: true },
 			},
 			{
-				path: "product-details",
+				path: ":id",
 				name: "ProductDetails",
 				component: () => import("@/views/products/ProductDetails.vue"),
 				meta: { requiredAuth: true },

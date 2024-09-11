@@ -1,10 +1,10 @@
-<script setup lang="ts">
+<script setup>
 import { useAuthStore } from "@/stores/auth_store";
 
 const auth_store = useAuthStore();
 </script>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 
 export default defineComponent({

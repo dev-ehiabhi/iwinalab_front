@@ -1,4 +1,4 @@
-<script lang="ts"></script>
+<script></script>
 
 <template>
 	<section class="text-gray-600 body-font overflow-hidden">
@@ -28,7 +28,7 @@
 								stroke-linecap="round"
 								stroke-linejoin="round"
 								stroke-width="2"
-								class="w-4 h-4 text-indigo-500"
+								class="w-4 h-4 text-lime-500"
 								viewBox="0 0 24 24"
 							>
 								<path
@@ -41,7 +41,7 @@
 								stroke-linecap="round"
 								stroke-linejoin="round"
 								stroke-width="2"
-								class="w-4 h-4 text-indigo-500"
+								class="w-4 h-4 text-lime-500"
 								viewBox="0 0 24 24"
 							>
 								<path
@@ -54,7 +54,7 @@
 								stroke-linecap="round"
 								stroke-linejoin="round"
 								stroke-width="2"
-								class="w-4 h-4 text-indigo-500"
+								class="w-4 h-4 text-lime-500"
 								viewBox="0 0 24 24"
 							>
 								<path
@@ -67,7 +67,7 @@
 								stroke-linecap="round"
 								stroke-linejoin="round"
 								stroke-width="2"
-								class="w-4 h-4 text-indigo-500"
+								class="w-4 h-4 text-lime-500"
 								viewBox="0 0 24 24"
 							>
 								<path
@@ -80,7 +80,7 @@
 								stroke-linecap="round"
 								stroke-linejoin="round"
 								stroke-width="2"
-								class="w-4 h-4 text-indigo-500"
+								class="w-4 h-4 text-lime-500"
 								viewBox="0 0 24 24"
 							>
 								<path
@@ -156,14 +156,14 @@
 								class="border-2 border-gray-300 ml-1 bg-gray-700 rounded-full w-6 h-6 focus:outline-none"
 							></button>
 							<button
-								class="border-2 border-gray-300 ml-1 bg-indigo-500 rounded-full w-6 h-6 focus:outline-none"
+								class="border-2 border-gray-300 ml-1 bg-lime-500 rounded-full w-6 h-6 focus:outline-none"
 							></button>
 						</div>
 						<div class="flex ml-6 items-center">
 							<span class="mr-3">Size</span>
 							<div class="relative">
 								<select
-									class="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10"
+									class="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-lime-200 focus:border-lime-500 text-base pl-3 pr-10"
 								>
 									<option>SM</option>
 									<option>M</option>
@@ -194,7 +194,7 @@
 							>$58.00</span
 						>
 						<button
-							class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+							class="flex ml-auto text-white bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded"
 						>
 							Button
 						</button>

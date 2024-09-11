@@ -1,10 +1,21 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted, ref } from "vue";
 import { useCategoryStore } from "@/stores/modules/category.store";
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import { useProductStore } from "@/stores/modules/product.store";
-// import Swal from "sweetalert2";
-// import LoadingIndicator from "@/components/LoadingIndicator.vue";
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+	toast: true,
+	position: "top-end",
+	showConfirmButton: false,
+	timer: 3000,
+	timerProgressBar: true,
+	didOpen: (toast) => {
+		toast.onmouseenter = Swal.stopTimer;
+		toast.onmouseleave = Swal.resumeTimer;
+	},
+});
 
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
@@ -19,8 +30,8 @@ onMounted(async () => {
 
 let product_image = ref(null);
 
-const selectImage = (event: any) => {
-	product_image.value = event.target.files[0];
+const selectImage = (e) => {
+	product_image.value = e.target.files[0];
 };
 
 const category_id = ref("");
@@ -51,65 +62,6 @@ const createProduct = async () => {
 };
 </script>
 
-<script lang="ts">
-// import { defineComponent } from "vue";
-// import { useProductStore } from "@/stores/modules/product.store";
-import Swal from "sweetalert2";
-
-const Toast = Swal.mixin({
-	toast: true,
-	position: "top-end",
-	showConfirmButton: false,
-	timer: 3000,
-	timerProgressBar: true,
-	didOpen: (toast) => {
-		toast.onmouseenter = Swal.stopTimer;
-		toast.onmouseleave = Swal.resumeTimer;
-	},
-});
-
-// export default defineComponent({
-// name: "ProductCreate",
-// data() {
-// 	return {
-// 		name: "",
-// 		price: "",
-// 		description: "",
-// 		category_id: "",
-// 		user_id: "",
-// 	};
-// },
-
-// methods: {
-// async createProduct() {
-// const productStore = useProductStore();
-// const data = {
-// 	name: this.name,
-// 	price: this.price,
-// 	description: this.description,
-// 	category_id: this.category_id,
-// 	user_id: localStorage.getItem("userId"),
-// };
-// try {
-// await productStore.createProduct(data).then(() => {
-// 	if (productStore.getIsSuccessful) {
-// 		Toast.fire({
-// 			icon: "success",
-// 			title: productStore.getResponseMessage,
-// 		});
-// 		this.$router.push({ path: "/products/products-list" });
-// 	}
-// });
-// } catch (err) {
-// 	console.log(`Some error ` + err);
-// } finally {
-//
-//}
-// },
-// },
-// });
-</script>
-
 <template>
 	<div class="w-full">
 		<BreadCrumb prev="Products" current="Add New Product"></BreadCrumb>
@@ -134,7 +86,7 @@ const Toast = Swal.mixin({
 							name="files"
 							id="files"
 							accept="image/*"
-							@change="(event) => selectImage(event)"
+							@change="selectImage($event)"
 							class="w-full text-center px-8 py-8 rounded-md text-gray-600"
 						/>
 					</div>

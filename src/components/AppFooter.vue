@@ -1,3 +1,8 @@
+<script setup>
+import { ref } from "vue";
+const footer = ref(false);
+</script>
+
 <template>
-    <div>Footer</div>
+	<div v-show="footer">Footer</div>
 </template>

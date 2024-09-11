@@ -1,11 +1,19 @@
-<script setup lang="ts">
-import LoadingIndicator from "@/components/LoadingIndicator.vue";
+<script setup>
+// import { ref } from "vue";
+// import LoadingIndicator from "@/components/LoadingIndicator.vue";
+
+// const loading = ref(false);
+
+// const changeLoadingStatus = () => {
+// 	loading.value = !loading.value;
+// };
 </script>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script>
+import { defineComponent, ref } from "vue";
 import { useAuthStore } from "@/stores/auth_store";
 import Swal from "sweetalert2";
+import LoadingIndicator from "@/components/LoadingIndicator.vue";
 
 const Toast = Swal.mixin({
 	toast: true,
@@ -25,6 +33,8 @@ export default defineComponent({
 		return {
 			email: "",
 			password: "",
+			loading: false,
+			errorStatus: false,
 		};
 	},
 
@@ -33,7 +43,14 @@ export default defineComponent({
 			(this.email = ""), (this.password = "");
 		},
 
+		changeLoadingStatus() {
+			this.loading = !this.loading;
+		},
+
 		async loginRequest() {
+			this.changeLoadingStatus();
+			this.errorStatus = false;
+
 			const authStore = useAuthStore();
 
 			const data = { email: this.email, password: this.password };
@@ -45,11 +62,14 @@ export default defineComponent({
 							icon: "success",
 							title: authStore.getResponseMessage,
 						});
+						this.changeLoadingStatus();
 						this.$router.push({ path: "/dashboard" });
 					}
 
 					if (!authStore.getIsAuthenticated) {
-						//
+						this.changeLoadingStatus();
+						this.errorStatus = true;
+						const { resp } = authStore.getResponseMessage;
 					}
 				});
 			} catch (err) {
@@ -110,6 +130,14 @@ export default defineComponent({
 							/>
 						</div>
 
+						<!-- Error handling -->
+						<div
+							v-show="errorStatus"
+							class="text-center pt-4 text-red-500 text-xs"
+						>
+							Error {{ resp }}
+						</div>
+
 						<div class="flex items-center justify-between mt-4">
 							<div>
 								<input
@@ -132,12 +160,22 @@ export default defineComponent({
 
 						<div class="py-4">
 							<button
+								v-if="!loading"
 								type="submit"
 								class="w-full px-6 py-3 flex justify-center text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
 							>
 								<span>Sign In</span>
+							</button>
 
-								<!-- <LoadingIndicator loading="{false}" /> -->
+							<button
+								v-else="loading"
+								type="button"
+								disabled
+								class="w-full px-6 py-3 flex justify-center text-md font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
+							>
+								<span
+									><LoadingIndicator></LoadingIndicator
+								></span>
 							</button>
 						</div>
 					</form>

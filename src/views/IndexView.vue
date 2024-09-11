@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
     import section_1_image from '@/assets/images/landing/challenges.png'
     import section_2_image from '@/assets/images/landing/harvest.png'
     import section_3_image from '@/assets/images/landing/guy.png'

@@ -29,15 +29,6 @@ export const useProductStore = defineStore("ProductStore", {
 			}
 		},
 
-		// async fetchCategories() {
-		// 	try {
-		// 		const response = await api.getCategories();
-		// 		this.categories = response.data.data;
-		// 	} catch (error) {
-		// 		return error;
-		// 	}
-		// },
-
 		async createProduct(credentials) {
 			this.isSuccessful = false;
 			try {
