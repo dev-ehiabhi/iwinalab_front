@@ -1,17 +1,8 @@
-<script setup>
-import { ref } from "vue";
-
-const register_toggle = ref(true);
-
-const changeRegisterToggle = (val) => {
-	register_toggle.value = val;
-};
-</script>
-
 <script>
 import { defineComponent } from "vue";
-import { useAuthStore } from "@/stores/auth_store";
 import Swal from "sweetalert2";
+import LoadingIndicator from "@/components/LoadingIndicator.vue";
+import AuthApis from "@/services/apis/AuthApis";
 
 const Toast = Swal.mixin({
 	toast: true,
@@ -25,32 +16,63 @@ const Toast = Swal.mixin({
 	},
 });
 
+const api = AuthApis;
+
 export default defineComponent({
 	name: "RegisterView",
+	components: {
+		LoadingIndicator,
+	},
 	data() {
 		return {
+			register_toggle: true,
 			first_name: "",
 			last_name: "",
 			email: "",
 			phone: "",
 			password: "",
 			organization: "",
-			terms_of_use: "",
+			first_name_errors: [],
+			last_name_errors: [],
+			email_errors: [],
+			phone_errors: [],
+			password_errors: [],
+			organization_errors: [],
+			terms_of_use: false,
+			loading: false,
 		};
 	},
 
 	methods: {
+		changeRegisterToggle(value) {
+			this.register_toggle = value;
+			this.clearFormError();
+		},
 		clearForm() {
-			(this.first_name = ""),
-				(this.last_name = ""),
-				(this.email = ""),
-				(this.phone = ""),
-				(this.password = ""),
-				(this.organization = "");
+			this.terms_of_use = false;
+			this.first_name = "";
+			this.last_name = "";
+			this.email = "";
+			this.phone = "";
+			this.password = "";
+			this.organization = "";
 		},
 
-		async registerRequest() {
-			const authStore = useAuthStore();
+		clearFormError() {
+			(this.first_name_errors = []),
+				(this.last_name_errors = []),
+				(this.email_errors = []),
+				(this.phone_errors = []),
+				(this.password_errors = []),
+				(this.organization_errors = []);
+		},
+
+		changeLoadingStatus(value) {
+			this.loading = value;
+		},
+
+		registerRequest() {
+			this.changeLoadingStatus(true);
 
 			const data = {
 				first_name: this.first_name,
@@ -59,24 +81,47 @@ export default defineComponent({
 				phone: this.phone,
 				password: this.password,
 				terms_of_use: this.terms_of_use,
+				organization: this.organization,
 			};
 
-			try {
-				await authStore.registerUser(data).then(() => {
-					if (authStore.getIsSuccessful) {
-						Toast.fire({
-							icon: "success",
-							title: authStore.getResponseMessage,
-						});
-						this.clearForm();
-						this.$router.push({ path: "/login" });
+			api.registerUser(data)
+				.then((RESPONSE) => {
+					console.log(RESPONSE.success);
+					console.log(RESPONSE.message);
+					this.changeLoadingStatus(false);
+					Toast.fire({
+						icon: "success",
+						title: RESPONSE.data.message,
+					});
+					this.clearForm();
+					this.$router.push({ path: "/login" });
+				})
+				.catch((ERROR) => {
+					if (ERROR.response.data.data.first_name) {
+						this.first_name_errors =
+							ERROR.response.data.data.first_name;
 					}
+					if (ERROR.response.data.data.last_name) {
+						this.last_name_errors =
+							ERROR.response.data.data.last_name;
+					}
+					if (ERROR.response.data.data.email) {
+						this.email_errors = ERROR.response.data.data.email;
+					}
+					if (ERROR.response.data.data.phone) {
+						this.phone_errors = ERROR.response.data.data.phone;
+					}
+					if (ERROR.response.data.data.password) {
+						this.password_errors =
+							ERROR.response.data.data.password;
+					}
+					if (ERROR.response.data.data.organization) {
+						this.organization_errors =
+							ERROR.response.data.data.organization;
+					}
+
+					this.changeLoadingStatus(false);
 				});
-			} catch (err) {
-				console.log(`Some error ` + err);
-			} finally {
-				//
-			}
 		},
 	},
 });
@@ -107,7 +152,7 @@ export default defineComponent({
 							]"
 							class="inline-flex items-center h-12 px-4 py-2 text-sm text-center text-gray-700 sm:text-base dark:border-gray-500 rounded-t-md dark:text-white whitespace-nowrap focus:outline-none hover:border-gray-400 dark:hover:border-gray-300"
 						>
-							Farmer
+							Individual
 						</button>
 
 						<button
@@ -136,22 +181,38 @@ export default defineComponent({
 							<input
 								id="first_name"
 								v-model="first_name"
-								class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								class="block w-full px-4 py-2 mt-2 capitalize text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 								type="text"
 								placeholder="First Name"
 								aria-label="First Name"
+								required
 							/>
+							<p
+								v-show="first_name_errors"
+								v-for="error in first_name_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
 						</div>
 
 						<div class="w-full mt-4">
 							<input
 								id="last_name"
 								v-model="last_name"
-								class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								class="block w-full px-4 py-2 mt-2 capitalize text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 								type="text"
 								placeholder="Last Name"
 								aria-label="Last Name"
+								required
 							/>
+							<p
+								v-show="last_name_errors"
+								v-for="error in last_name_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
 						</div>
 
 						<div class="w-full mt-4">
@@ -164,6 +225,13 @@ export default defineComponent({
 								aria-label="Email Address"
 								required
 							/>
+							<p
+								v-show="email_errors"
+								v-for="error in email_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
 						</div>
 
 						<div class="w-full mt-4">
@@ -174,7 +242,15 @@ export default defineComponent({
 								type="tel"
 								placeholder="Phone Number"
 								aria-label="Phone"
+								required
 							/>
+							<p
+								v-show="phone_errors"
+								v-for="error in phone_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
 						</div>
 
 						<div class="w-full mt-4">
@@ -185,7 +261,16 @@ export default defineComponent({
 								type="password"
 								placeholder="Password"
 								aria-label="Password"
+								autocomplete
+								required
 							/>
+							<p
+								v-show="password_errors"
+								v-for="error in password_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
 						</div>
 
 						<div class="flex items-center justify-between mt-4">
@@ -196,6 +281,7 @@ export default defineComponent({
 									type="checkbox"
 									value="terms_of_use"
 									class="text-md text-gray-600 dark:text-gray-200 hover:text-gray-500"
+									required
 								/>
 								<label for="terms_of_use" class="ml-3"
 									>By signing up, you agree to our
@@ -209,12 +295,15 @@ export default defineComponent({
 
 						<div class="py-4">
 							<button
+								v-if="loading"
+								class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
+							>
+								<LoadingIndicator></LoadingIndicator>
+							</button>
+
+							<button
+								v-else
 								type="submit"
-								:class="
-									useAuthStore.getIsLoading
-										? 'disabled'
-										: 'enable'
-								"
 								class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
 							>
 								Sign Up
@@ -222,6 +311,7 @@ export default defineComponent({
 						</div>
 					</form>
 
+					<!-- Second form -->
 					<form
 						name="organization"
 						v-else
@@ -231,22 +321,38 @@ export default defineComponent({
 							<input
 								id="first_name"
 								v-model="first_name"
-								class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								class="block w-full px-4 py-2 mt-2 capitalize text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 								type="text"
 								placeholder="First Name"
 								aria-label="First Name"
+								required
 							/>
+							<p
+								v-show="first_name_errors"
+								v-for="error in first_name_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
 						</div>
 
 						<div class="w-full mt-4">
 							<input
 								id="last_name"
 								v-model="last_name"
-								class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								class="block w-full px-4 py-2 mt-2 capitalize text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 								type="text"
 								placeholder="Last Name"
 								aria-label="Last Name"
+								required
 							/>
+							<p
+								v-show="last_name_errors"
+								v-for="error in last_name_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
 						</div>
 
 						<div class="w-full mt-4">
@@ -259,6 +365,13 @@ export default defineComponent({
 								aria-label="Email Address"
 								required
 							/>
+							<p
+								v-show="email_errors"
+								v-for="error in email_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
 						</div>
 
 						<div class="w-full mt-4">
@@ -272,19 +385,16 @@ export default defineComponent({
 								min="11"
 								max="15"
 								pattern="[0-9\-\+\(\)\s]+"
-								data-for="phoneNumber"
+								data-for="phone"
+								required
 							/>
-						</div>
-
-						<div class="w-full mt-4">
-							<input
-								id="organization"
-								v-model="organization"
-								class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
-								type="text"
-								placeholder="Name of Organization"
-								aria-label="Organization"
-							/>
+							<p
+								v-show="phone_errors"
+								v-for="error in phone_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
 						</div>
 
 						<div class="w-full mt-4">
@@ -295,7 +405,34 @@ export default defineComponent({
 								type="password"
 								placeholder="Password"
 								aria-label="Password"
+								required
 							/>
+							<p
+								v-show="password_errors"
+								v-for="error in password_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
+						</div>
+
+						<div class="w-full mt-4">
+							<input
+								id="organization"
+								v-model="organization"
+								class="block w-full px-4 py-2 mt-2 capitalize text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								type="text"
+								placeholder="Name of Organization"
+								aria-label="Organization"
+								required
+							/>
+							<p
+								v-show="organization_errors"
+								v-for="error in organization_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
 						</div>
 
 						<div class="flex items-center justify-between mt-4">
@@ -306,6 +443,7 @@ export default defineComponent({
 									type="checkbox"
 									value="Remember"
 									class="text-md text-gray-600 dark:text-gray-200 hover:text-gray-500"
+									required
 								/>
 								<label for="remember" class="ml-3"
 									>By signing up, you agree to our
@@ -319,6 +457,14 @@ export default defineComponent({
 
 						<div class="py-4">
 							<button
+								v-if="loading"
+								class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
+							>
+								<LoadingIndicator></LoadingIndicator>
+							</button>
+
+							<button
+								v-else
 								type="submit"
 								class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
 							>

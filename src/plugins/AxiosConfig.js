@@ -11,7 +11,7 @@ const AxiosConfig = axios.create({
 	baseURL: url,
 	headers: {
 		Accept: "application/json",
-		"Content-Type": "application/json",
+		// "Content-Type": "application/json",
 		"Content-Type": "multipart/form-data",
 		"Access-Control-Allow-Origin": true,
 	},
@@ -30,11 +30,13 @@ AxiosConfig.interceptors.response.use(
 	(error) => {
 		if (error.response.status === 401) {
 			localStorage.removeItem("TOKEN");
-			router.push({ name: "Login" });
+			// router.push({ name: "Login" });
+			return response;
 		} else if (error.response.status === 404) {
 			router.push({ name: "NotFound" });
 		}
 		throw error;
+		// return Promise.reject(error);
 	}
 );
 

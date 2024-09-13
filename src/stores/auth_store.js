@@ -3,15 +3,6 @@ import AuthApis from "@/services/apis/AuthApis";
 
 const api = AuthApis;
 
-// interface State {
-// 	isLoading: boolean;
-// 	isSuccessful: boolean;
-// 	isAuthenticated: boolean;
-// 	token: string | null;
-// 	responseMessage: string;
-// 	user: Object;
-// }
-
 export const useAuthStore = defineStore("useAuthStore", {
 	state: () => ({
 		isLoading: false,
@@ -20,6 +11,7 @@ export const useAuthStore = defineStore("useAuthStore", {
 		token: "",
 		responseMessage: "",
 		user: {},
+		errorMessage: "",
 	}),
 	getters: {
 		getIsLoading: (state) => state.isLoading,
@@ -35,9 +27,11 @@ export const useAuthStore = defineStore("useAuthStore", {
 		getLastName() {
 			return localStorage.getItem("lastName");
 		},
+		getErrorMessage: (state) => state.errorMessage,
 	},
 	actions: {
 		async registerUser(credentials) {
+			this.isSuccessful = false;
 			try {
 				const response = await api.registerUser(credentials);
 				this.isSuccessful = response.data.success;
@@ -52,6 +46,7 @@ export const useAuthStore = defineStore("useAuthStore", {
 
 		async loginUser(credentials) {
 			this.responseMessage = "";
+			this.errorMessage = "";
 			try {
 				const response = await api.loginUser(credentials);
 				this.isSuccessful = response.data.success;
@@ -72,9 +67,11 @@ export const useAuthStore = defineStore("useAuthStore", {
 				this.responseMessage = response.data.message;
 				// showTooltip(`Welcome back ${this.userData.name}!`)
 			} catch (error) {
+				this.responseMessage = "";
 				// showTooltip(error)
 				// let the form component display the error
-				return error;
+				console.log(error.code);
+				this.errorMessage = error.message;
 			}
 		},
 		async logoutUser() {

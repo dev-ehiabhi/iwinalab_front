@@ -1,16 +1,15 @@
 <script setup>
-// import { ref } from "vue";
-// import LoadingIndicator from "@/components/LoadingIndicator.vue";
+import { ref } from "vue";
 
-// const loading = ref(false);
+const register_toggle = ref(true);
 
-// const changeLoadingStatus = () => {
-// 	loading.value = !loading.value;
-// };
+const changeRegisterToggle = (val) => {
+	register_toggle.value = val;
+};
 </script>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { useAuthStore } from "@/stores/auth_store";
 import Swal from "sweetalert2";
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
@@ -28,55 +27,63 @@ const Toast = Swal.mixin({
 });
 
 export default defineComponent({
-	name: "LoginView",
-	components: {
-		LoadingIndicator,
-	},
+	name: "RegisterView",
 	data() {
 		return {
+			first_name: "",
+			last_name: "",
 			email: "",
+			phone: "",
 			password: "",
+			organization: "",
+			terms_of_use: false,
 			loading: false,
-			errorStatus: false,
-			responseMessage: "",
 		};
 	},
 
 	methods: {
 		clearForm() {
-			(this.email = ""), (this.password = "");
+			this.terms_of_use = false;
+			this.first_name = "";
+			this.last_name = "";
+			this.email = "";
+			this.phone = "";
+			this.password = "";
+			this.organization = "";
 		},
 
 		changeLoadingStatus() {
 			this.loading = !this.loading;
 		},
 
-		async loginRequest() {
-			this.changeLoadingStatus();
-			this.errorStatus = false;
-
+		async registerRequest() {
 			const authStore = useAuthStore();
+			this.changeLoadingStatus();
 
-			const data = { email: this.email, password: this.password };
+			const data = {
+				first_name: this.first_name,
+				last_name: this.last_name,
+				email: this.email,
+				phone: this.phone,
+				password: this.password,
+				terms_of_use: this.terms_of_use,
+				organization: this.organization,
+			};
 
 			try {
-				await authStore.loginUser(data).then(() => {
-					if (authStore.getIsAuthenticated) {
+				await authStore.registerUser(data).then(() => {
+					if (authStore.getIsSuccessful) {
+						this.changeLoadingStatus();
 						Toast.fire({
 							icon: "success",
 							title: authStore.getResponseMessage,
 						});
-						this.changeLoadingStatus();
-						this.$router.push({ path: "/dashboard" });
-					}
-
-					if (!authStore.getIsAuthenticated) {
-						this.changeLoadingStatus();
-						this.errorStatus = true;
+						this.clearForm();
+						this.$router.push({ path: "/login" });
 					}
 				});
 			} catch (err) {
-				console.log(`Some error` + err);
+				console.log(`Some error ` + err);
 			} finally {
 				//
 			}
@@ -90,23 +97,75 @@ export default defineComponent({
 		<div class="w-1/2 flex-grow">
 			<div class="rounded-lg dark:bg-gray-800">
 				<div class="px-12 pt-8">
-					<!-- <div class="flex justify-center mx-auto">
-                        <img class="w-auto h-7 sm:h-8" :src="logo" alt="">
-                    </div> -->
-
 					<h3
-						class="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200"
+						class="mt-3 text-xl font-medium text-gray-600 dark:text-gray-200"
 					>
-						Welcome Back
+						Sign Up to create account
 					</h3>
 
-					<p
-						class="mt-1 text-center text-gray-500 dark:text-gray-400"
-					>
-						Enter credentials to access account
+					<p class="mt-1 text-gray-500 dark:text-gray-400">
+						Enter credentials to an create account
 					</p>
 
-					<form @submit.prevent="loginRequest()" name="login_form">
+					<div class="flex py-4 overflow-x-auto whitespace-nowrap">
+						<button
+							@click="changeRegisterToggle(true)"
+							:class="[
+								register_toggle
+									? 'border border-b-0 border-gray-300 bg-gray-200'
+									: 'border-b border-gray-300',
+							]"
+							class="inline-flex items-center h-12 px-4 py-2 text-sm text-center text-gray-700 sm:text-base dark:border-gray-500 rounded-t-md dark:text-white whitespace-nowrap focus:outline-none hover:border-gray-400 dark:hover:border-gray-300"
+						>
+							Farmer
+						</button>
+
+						<button
+							@click="changeRegisterToggle(false)"
+							:class="[
+								register_toggle
+									? 'border-b border-gray-300'
+									: 'border border-b-0 border-gray-300 bg-gray-200 rounded-t-md',
+							]"
+							class="inline-flex items-center h-12 px-4 py-2 text-sm text-center text-gray-700 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300"
+						>
+							Organization
+						</button>
+
+						<!-- <button class="inline-flex items-center h-12 px-4 py-2 text-sm text-center text-gray-700 bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300">
+                            Regulation
+                        </button> -->
+					</div>
+
+					<form
+						name="farmer"
+						v-if="register_toggle"
+						@submit.prevent="registerRequest()"
+					>
+						<div class="w-full mt-4">
+							<input
+								id="first_name"
+								v-model="first_name"
+								class="block w-full px-4 py-2 mt-2 capitalize text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								type="text"
+								placeholder="First Name"
+								aria-label="First Name"
+								required
+							/>
+						</div>
+
+						<div class="w-full mt-4">
+							<input
+								id="last_name"
+								v-model="last_name"
+								class="block w-full px-4 py-2 mt-2 capitalize text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								type="text"
+								placeholder="Last Name"
+								aria-label="Last Name"
+								required
+							/>
+						</div>
+
 						<div class="w-full mt-4">
 							<input
 								id="email"
@@ -116,7 +175,18 @@ export default defineComponent({
 								placeholder="Email Address"
 								aria-label="Email Address"
 								required
-								autocomplete="true"
+							/>
+						</div>
+
+						<div class="w-full mt-4">
+							<input
+								id="phone"
+								v-model="phone"
+								class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								type="tel"
+								placeholder="Phone Number"
+								aria-label="Phone"
+								required
 							/>
 						</div>
 
@@ -129,24 +199,137 @@ export default defineComponent({
 								placeholder="Password"
 								aria-label="Password"
 								required
-								autocomplete="true"
 							/>
 						</div>
 
-						<!-- Error handling -->
-						<div
-							v-show="errorStatus"
-							class="text-center pt-4 text-red-500 text-xs"
-						>
-							Your credentials do not match
+						<div class="flex items-center justify-between mt-4">
+							<div>
+								<input
+									id="terms_of_use"
+									v-model="terms_of_use"
+									type="checkbox"
+									value="terms_of_use"
+									class="text-md text-gray-600 dark:text-gray-200 hover:text-gray-500"
+									required
+								/>
+								<label for="terms_of_use" class="ml-3"
+									>By signing up, you agree to our
+									<span class="text-blue-600"
+										>Terms of Use</span
+									></label
+								>
+							</div>
+							<!-- <a href="#" class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500">Forget Password?</a> -->
 						</div>
 
-						<!-- Network Error handling -->
-						<div
-							v-show="networkError"
-							class="text-center pt-4 text-red-500 text-xs"
-						>
-							There appears to be a network error.
+						<div class="py-4">
+							<button
+								v-if="loading"
+								:class="
+									useAuthStore.getIsLoading
+										? 'disabled'
+										: 'enable'
+								"
+								class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
+							>
+								<LoadingIndicator></LoadingIndicator>
+							</button>
+
+							<button
+								v-else
+								type="submit"
+								:class="
+									useAuthStore.getIsLoading
+										? 'disabled'
+										: 'enable'
+								"
+								class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
+							>
+								Sign Up
+							</button>
+						</div>
+					</form>
+
+					<!-- Second form -->
+					<form
+						name="organization"
+						v-else
+						@submit.prevent="registerRequest()"
+					>
+						<div class="w-full mt-4">
+							<input
+								id="first_name"
+								v-model="first_name"
+								class="block w-full px-4 py-2 mt-2 capitalize text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								type="text"
+								placeholder="First Name"
+								aria-label="First Name"
+								required
+							/>
+						</div>
+
+						<div class="w-full mt-4">
+							<input
+								id="last_name"
+								v-model="last_name"
+								class="block w-full px-4 py-2 mt-2 capitalize text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								type="text"
+								placeholder="Last Name"
+								aria-label="Last Name"
+								required
+							/>
+						</div>
+
+						<div class="w-full mt-4">
+							<input
+								id="email"
+								v-model="email"
+								class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								type="email"
+								placeholder="Email Address"
+								aria-label="Email Address"
+								required
+							/>
+						</div>
+
+						<div class="w-full mt-4">
+							<input
+								id="phone"
+								v-model="phone"
+								class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								type="tel"
+								placeholder="Phone Number"
+								aria-label="Phone"
+								min="11"
+								max="15"
+								pattern="[0-9\-\+\(\)\s]+"
+								data-for="phone"
+								required
+							/>
+						</div>
+
+						<div class="w-full mt-4">
+							<input
+								id="password"
+								v-model="password"
+								class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								type="password"
+								placeholder="Password"
+								aria-label="Password"
+								required
+							/>
+						</div>
+
+						<div class="w-full mt-4">
+							<input
+								id="organization"
+								v-model="organization"
+								class="block w-full px-4 py-2 mt-2 capitalize text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+								type="text"
+								placeholder="Name of Organization"
+								aria-label="Organization"
+								required
+							/>
 						</div>
 
 						<div class="flex items-center justify-between mt-4">
@@ -157,36 +340,32 @@ export default defineComponent({
 									type="checkbox"
 									value="Remember"
 									class="text-md text-gray-600 dark:text-gray-200 hover:text-gray-500"
+									required
 								/>
 								<label for="remember" class="ml-3"
-									>Remember</label
+									>By signing up, you agree to our
+									<span class="text-blue-600"
+										>Terms of Use</span
+									></label
 								>
 							</div>
-							<a
-								href="#"
-								class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
-								>Forget Password?</a
-							>
+							<!-- <a href="#" class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500">Forget Password?</a> -->
 						</div>
 
 						<div class="py-4">
 							<button
-								v-if="!loading"
-								type="submit"
-								class="w-full px-6 py-3 flex justify-center text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
+								v-if="loading"
+								class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
 							>
-								<span>Sign In</span>
+								<LoadingIndicator></LoadingIndicator>
 							</button>
 
 							<button
-								v-else="loading"
-								type="button"
-								disabled
-								class="w-full px-6 py-3 flex justify-center text-md font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
+								v-else
+								type="submit"
+								class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-lime-500 rounded-lg hover:bg-lime-400 focus:outline-none focus:ring focus:ring-lime-300 focus:ring-opacity-50"
 							>
-								<span
-									><LoadingIndicator></LoadingIndicator
-								></span>
+								Sign Up
 							</button>
 						</div>
 					</form>
@@ -195,14 +374,14 @@ export default defineComponent({
 				<div
 					class="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700"
 				>
-					<span class="text-sm text-gray-600 dark:text-gray-200"
-						>Don't have an account?
+					<span class="text-sm text-gray-600 dark:text-gray-200">
+						Already have an account?
 					</span>
 
 					<RouterLink
-						to="/register"
+						to="/login"
 						class="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline"
-						>Register</RouterLink
+						>Login</RouterLink
 					>
 				</div>
 			</div>
