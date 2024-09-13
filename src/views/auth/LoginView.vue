@@ -1,19 +1,12 @@
-<script setup>
-// import { ref } from "vue";
-// import LoadingIndicator from "@/components/LoadingIndicator.vue";
-
-// const loading = ref(false);
-
-// const changeLoadingStatus = () => {
-// 	loading.value = !loading.value;
-// };
-</script>
-
 <script>
 import { defineComponent, ref } from "vue";
-import { useAuthStore } from "@/stores/auth_store";
+import AuthApis from "@/services/apis/AuthApis";
 import Swal from "sweetalert2";
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
+import { mapActions } from "pinia";
+import useAuthStore from "@/stores/auth_store";
+
+const api = AuthApis;
 
 const Toast = Swal.mixin({
 	toast: true,
@@ -37,12 +30,17 @@ export default defineComponent({
 			email: "",
 			password: "",
 			loading: false,
-			errorStatus: false,
+			email_error: "",
 			responseMessage: "",
 		};
 	},
 
 	methods: {
+		...mapActions(useAuthStore, [
+			"loginUser",
+			"setToken",
+			"setIsAuthenticated",
+		]),
 		clearForm() {
 			(this.email = ""), (this.password = "");
 		},
@@ -51,35 +49,41 @@ export default defineComponent({
 			this.loading = !this.loading;
 		},
 
-		async loginRequest() {
+		loginRequest() {
+			localStorage.clear();
 			this.changeLoadingStatus();
-			this.errorStatus = false;
-
-			const authStore = useAuthStore();
+			this.email_error = "";
 
 			const data = { email: this.email, password: this.password };
 
-			try {
-				await authStore.loginUser(data).then(() => {
-					if (authStore.getIsAuthenticated) {
-						Toast.fire({
-							icon: "success",
-							title: authStore.getResponseMessage,
-						});
-						this.changeLoadingStatus();
-						this.$router.push({ path: "/dashboard" });
+			api.loginUser(data)
+				.then((RESPONSE) => {
+					this.loginUser(RESPONSE.data.data.user);
+					this.setToken(RESPONSE.data.data.token);
+					this.setIsAuthenticated(RESPONSE.data.status);
+					Toast.fire({
+						icon: "success",
+						title: RESPONSE.data.message,
+					});
+					this.changeLoadingStatus();
+					this.$router.push({ path: "/dashboard" });
+				})
+				.catch((ERROR) => {
+					if (ERROR.response.status == 400) {
+						// Swal.fire({
+						// 	icon: "error",
+						// 	title: ERROR.response.data.message,
+						// });
+						this.email_error = ERROR.response.data.message;
+					} else {
+						// Swal.fire({
+						// 	icon: "error",
+						// 	title: "Server Error",
+						// });
 					}
 
-					if (!authStore.getIsAuthenticated) {
-						this.changeLoadingStatus();
-						this.errorStatus = true;
-					}
+					this.changeLoadingStatus();
 				});
-			} catch (err) {
-				console.log(`Some error` + err);
-			} finally {
-				//
-			}
 		},
 	},
 });
@@ -135,10 +139,10 @@ export default defineComponent({
 
 						<!-- Error handling -->
 						<div
-							v-show="errorStatus"
+							v-show="email_error"
 							class="text-center pt-4 text-red-500 text-xs"
 						>
-							Your credentials do not match
+							{{ email_error }}
 						</div>
 
 						<!-- Network Error handling -->

@@ -1,4 +1,4 @@
-import { useAuthStore } from "@/stores/auth_store";
+import useAuthStore from "@/stores/auth_store";
 import axios from "axios";
 import router from "@/router";
 
@@ -29,11 +29,13 @@ AxiosConfig.interceptors.response.use(
 	},
 	(error) => {
 		if (error.response.status === 401) {
-			localStorage.removeItem("TOKEN");
-			// router.push({ name: "Login" });
+			localStorage.removeItem("token");
+			router.push({ name: "Login" });
 			return response;
 		} else if (error.response.status === 404) {
 			router.push({ name: "NotFound" });
+		} else if (!error.response) {
+			console.log("Network Error");
 		}
 		throw error;
 		// return Promise.reject(error);

@@ -1,90 +1,51 @@
 import { defineStore } from "pinia";
-import AuthApis from "@/services/apis/AuthApis";
+// import AuthApis from "@/services/apis/AuthApis";
 
-const api = AuthApis;
+// const api = AuthApis;
 
-export const useAuthStore = defineStore("useAuthStore", {
-	state: () => ({
-		isLoading: false,
-		isSuccessful: false,
-		isAuthenticated: false,
-		token: "",
-		responseMessage: "",
-		user: {},
-		errorMessage: "",
-	}),
-	getters: {
-		getIsLoading: (state) => state.isLoading,
-		getIsSuccessful: (state) => state.isSuccessful,
-		getIsAuthenticated: (state) =>
-			state.isAuthenticated || localStorage.getItem("loggedin"),
-		getToken: (state) => state.token || localStorage.getItem("token"),
-		getResponseMessage: (state) => state.responseMessage,
-		getUser: (state) => state.user,
-		getFirstName() {
-			return localStorage.getItem("firstName");
+export const useAuthStore = defineStore(
+	"authStore",
+	{
+		state: () => ({
+			isAuthenticated: false || localStorage.getItem("loggedIn"),
+			token: "" || localStorage.getItem("token"),
+			user: {},
+			first_name: "" || localStorage.getItem("first_name"),
+			last_name: "" || localStorage.getItem("last_name"),
+		}),
+		getters: {
+			getIsAuthenticated: (state) =>
+				state.isAuthenticated || localStorage.getItem("loggedIn"),
+			getToken: (state) => state.token || localStorage.getItem("token"),
+			getUser: (state) => state.user,
+			getFirstName() {
+				return localStorage.getItem("first_name");
+			},
+			getLastName() {
+				return localStorage.getItem("last_name");
+			},
 		},
-		getLastName() {
-			return localStorage.getItem("lastName");
-		},
-		getErrorMessage: (state) => state.errorMessage,
-	},
-	actions: {
-		async registerUser(credentials) {
-			this.isSuccessful = false;
-			try {
-				const response = await api.registerUser(credentials);
-				this.isSuccessful = response.data.success;
-				this.responseMessage = response.data.message;
-				// showTooltip(`Welcome back ${this.userData.name}!`)
-			} catch (error) {
-				// showTooltip(error)
-				// let the form component display the error
-				return error;
-			}
-		},
+		actions: {
+			setToken(token) {
+				this.token = token;
+				localStorage.setItem("token", token);
+			},
 
-		async loginUser(credentials) {
-			this.responseMessage = "";
-			this.errorMessage = "";
-			try {
-				const response = await api.loginUser(credentials);
-				this.isSuccessful = response.data.success;
-				this.token = response.data.data.token;
-				localStorage.setItem("token", response.data.data.token);
-				this.isAuthenticated = response.data.success;
-				localStorage.setItem("loggedin", response.data.success);
-				this.user = response.data.data.user;
-				localStorage.setItem("userId", response.data.data.user.id);
-				localStorage.setItem(
-					"firstName",
-					response.data.data.user.first_name
-				);
-				localStorage.setItem(
-					"lastName",
-					response.data.data.user.last_name
-				);
-				this.responseMessage = response.data.message;
-				// showTooltip(`Welcome back ${this.userData.name}!`)
-			} catch (error) {
-				this.responseMessage = "";
-				// showTooltip(error)
-				// let the form component display the error
-				console.log(error.code);
-				this.errorMessage = error.message;
-			}
-		},
-		async logoutUser() {
-			this.responseMessage = "";
-			try {
-				const response = await api.logoutUser();
-				this.isSuccessful = response.data.success;
-				this.isAuthenticated = false;
-				this.responseMessage = response.data.message;
-				localStorage.clear();
-			} catch (error) {
-				return error;
-			}
+			setIsAuthenticated(status) {
+				this.isAuthenticated = status;
+				localStorage.setItem("loggedIn", status);
+			},
+
+			loginUser(user) {
+				this.$state.user = user;
+				localStorage.setItem("first_name", user.first_name);
+				localStorage.setItem("last_name", user.last_name);
+			},
 		},
 	},
-});
+	{
+		persist: true,
+	}
+);
+
+export default useAuthStore;

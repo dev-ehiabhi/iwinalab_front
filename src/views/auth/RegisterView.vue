@@ -86,8 +86,6 @@ export default defineComponent({
 
 			api.registerUser(data)
 				.then((RESPONSE) => {
-					console.log(RESPONSE.success);
-					console.log(RESPONSE.message);
 					this.changeLoadingStatus(false);
 					Toast.fire({
 						icon: "success",

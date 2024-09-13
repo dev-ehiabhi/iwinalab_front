@@ -1,13 +1,14 @@
-<script setup lang="ts">
+<script setup>
 import logo from "@/assets/images/general/iwina_logo.png";
 
 const auth_store = useAuthStore();
 </script>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 import { useAuthStore } from "@/stores/auth_store";
 import Swal from "sweetalert2";
+import AuthApis from "@/services/apis/AuthApis";
 
 const Toast = Swal.mixin({
 	toast: true,
@@ -21,22 +22,29 @@ const Toast = Swal.mixin({
 	},
 });
 
+const api = AuthApis;
 export default defineComponent({
 	name: "AppAside",
 
 	methods: {
-		async logout() {
+		logout() {
 			const authStore = useAuthStore();
-			await authStore.logoutUser().then(() => {
-				if (authStore.isSuccessful) {
+			api.logoutUser()
+				.then((response) => {
 					Toast.fire({
 						icon: "success",
-						title: authStore.getResponseMessage,
+						title: response.data.message,
 					});
-					this.$router.push({ path: "/" });
+					localStorage.clear();
 					authStore.$reset();
-				}
-			});
+					this.$router.push({ path: "/" });
+				})
+				.catch((error) => {
+					Toast.fire({
+						icon: "error",
+						title: error.response.data.message,
+					});
+				});
 		},
 	},
 });
