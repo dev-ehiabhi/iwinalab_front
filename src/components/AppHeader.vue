@@ -361,7 +361,7 @@ useDetectOutsideClick(componentRef, () => {
 					</a>
 
 					<RouterLink
-						to="/about"
+						to="/about-us"
 						class="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2 whitespace-nowrap"
 						>About Us</RouterLink
 					>
@@ -378,10 +378,10 @@ useDetectOutsideClick(componentRef, () => {
 						class="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
 						>Login</RouterLink
 					>
-					<a
-						href="#"
+					<RouterLink
+						to="/contact-us"
 						class="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
-						>Contact</a
+						>Contact</RouterLink
 					>
 				</div>
 			</div>

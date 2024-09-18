@@ -25,12 +25,18 @@ const guestRoutes = [
 				meta: { requiresAuth: false },
 			},
 			{
-				path: "/about",
-				name: "about",
+				path: "/about-us",
+				name: "About",
 				// route level code-splitting
 				// this generates a separate chunk (About.[hash].js) for this route
 				// which is lazy-loaded when the route is visited.
 				component: () => import("@/views/AboutView.vue"),
+				meta: { requiresAuth: false },
+			},
+			{
+				path: "/contact-us",
+				name: "Contact",
+				component: () => import("@/views/ContactView.vue"),
 				meta: { requiresAuth: false },
 			},
 		],
