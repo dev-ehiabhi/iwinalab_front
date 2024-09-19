@@ -14,6 +14,30 @@ const productRoutes = [
 		],
 	},
 	{
+		path: "/my-store",
+		component: AuthLayout,
+		children: [
+			{
+				path: "product-list",
+				name: "ProductIndex",
+				component: () => import("@/views/mystore/ProductIndex.vue"),
+				meta: { requiresAuth: true },
+			},
+			{
+				path: "products/add-product",
+				name: "ProductCreate",
+				component: () => import("@/views/mystore/ProductCreate.vue"),
+				meta: { requiresAuth: true },
+			},
+			{
+				path: "products/edit-product/:id",
+				name: "ProductUpdate",
+				component: () => import("@/views/mystore/ProductEdit.vue"),
+				meta: { requiresAuth: true },
+			},
+		],
+	},
+	{
 		path: "/products",
 		component: AuthLayout,
 		children: [

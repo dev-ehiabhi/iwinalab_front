@@ -6,7 +6,8 @@ const api = ProductApis;
 export const useProductStore = defineStore("ProductStore", {
 	state: () => ({
 		isSuccessful: false,
-		products: {},
+		products: [],
+		product: {},
 		responseMessage: "",
 	}),
 	getters: {
@@ -14,9 +15,20 @@ export const useProductStore = defineStore("ProductStore", {
 		getProducts() {
 			return this.products;
 		},
+		getProduct() {
+			return this.product;
+		},
 		getResponseMessage: (state) => !!state.responseMessage,
 	},
 	actions: {
+		setProducts(products) {
+			this.products = products;
+		},
+
+		setProduct(product) {
+			this.product = product;
+		},
+
 		async fetchProducts() {
 			this.isSuccessful = false;
 			try {

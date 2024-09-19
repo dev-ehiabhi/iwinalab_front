@@ -38,6 +38,7 @@ export const useAuthStore = defineStore(
 
 			loginUser(user) {
 				this.$state.user = user;
+				localStorage.setItem("userId", user.id);
 				localStorage.setItem("first_name", user.first_name);
 				localStorage.setItem("last_name", user.last_name);
 			},

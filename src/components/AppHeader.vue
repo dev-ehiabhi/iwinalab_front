@@ -33,6 +33,7 @@ useDetectOutsideClick(componentRef, () => {
 				</RouterLink>
 
 				<!-- Mobile menu button -->
+				<!-- <div ref="componentRef" class="flex md:hidden"> -->
 				<div ref="componentRef" class="flex md:hidden">
 					<button
 						@click.stop="changeToggleStatus"

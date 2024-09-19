@@ -6,15 +6,20 @@ export default {
 	},
 
 	updateProduct(data) {
-		return axios.put("/products", data);
+		return axios.put(`/products/${id}`, data);
 	},
 
 	getProducts() {
 		return axios.get("/products");
 	},
 
+	getUserProducts(id) {
+		return axios.get(`/user/${id}/products`);
+		// return axios.get("/own_products", { params: { id: data } });
+	},
+
 	showProduct(id) {
-		return axios.get("/products" + id);
+		return axios.get("/products/" + id);
 	},
 
 	deleteProduct(id) {

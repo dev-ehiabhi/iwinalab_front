@@ -11,11 +11,8 @@
 				class="grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm bg-gray-50"
 			>
 				<div class="space-y-2 col-span-full lg:col-span-1">
-					<p class="font-medium">Personal Inormation</p>
-					<p class="text-xs">
-						Lorem ipsum dolor sit, amet consectetur adipisicing
-						elit. Adipisci fuga autem eum!
-					</p>
+					<p class="font-medium">Personal Information</p>
+					<p class="text-xs"></p>
 				</div>
 				<div class="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
 					<div class="col-span-full sm:col-span-3">
@@ -26,7 +23,8 @@
 							id="firstname"
 							type="text"
 							placeholder="First name"
-							class="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-600 border-gray-300 text-gray-900"
+							readonly
+							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 						/>
 					</div>
 					<div class="col-span-full sm:col-span-3">
@@ -35,7 +33,8 @@
 							id="lastname"
 							type="text"
 							placeholder="Last name"
-							class="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-600 border-gray-300 text-gray-900"
+							readonly
+							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 						/>
 					</div>
 					<div class="col-span-full sm:col-span-3">
@@ -44,7 +43,8 @@
 							id="email"
 							type="email"
 							placeholder="Email"
-							class="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-600 border-gray-300 text-gray-900"
+							readonly
+							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 						/>
 					</div>
 					<div class="col-span-full">
@@ -53,7 +53,7 @@
 							id="address"
 							type="text"
 							placeholder=""
-							class="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-600 border-gray-300 text-gray-900"
+							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 						/>
 					</div>
 					<div class="col-span-full sm:col-span-2">
@@ -62,7 +62,7 @@
 							id="city"
 							type="text"
 							placeholder=""
-							class="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-600 border-gray-300 text-gray-900"
+							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 						/>
 					</div>
 					<div class="col-span-full sm:col-span-2">
@@ -73,7 +73,7 @@
 							id="state"
 							type="text"
 							placeholder=""
-							class="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-600 border-gray-300 text-gray-900"
+							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 						/>
 					</div>
 					<div class="col-span-full sm:col-span-2">
@@ -82,17 +82,40 @@
 							id="zip"
 							type="text"
 							placeholder=""
-							class="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-600 border-gray-300 text-gray-900"
+							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 						/>
+					</div>
+					<div class="col-span-full flex justify-end my-8">
+						<button
+							class="bg-lime-400 text-lime-700 py-2 px-4 rounded-lg"
+						>
+							Submit
+						</button>
+						<button
+							v-show="false"
+							class="bg-lime-400 text-lime-700 py-2 px-3 rounded-lg"
+						>
+							Loading
+						</button>
 					</div>
 				</div>
 			</fieldset>
+		</form>
+
+		<div class="h-8"></div>
+
+		<form
+			novalidate=""
+			action=""
+			v-show="false"
+			class="container flex flex-col mx-auto space-y-12 ng-untouched ng-pristine ng-valid"
+		>
 			<fieldset
 				class="grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm bg-gray-50"
 			>
 				<div class="space-y-2 col-span-full lg:col-span-1">
-					<p class="font-medium">Profile</p>
-					<p class="text-xs">Adipisci fuga autem eum!</p>
+					<p class="font-medium">Profile Picture</p>
+					<p class="text-xs"></p>
 				</div>
 				<div class="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
 					<div class="col-span-full sm:col-span-3">
@@ -101,7 +124,7 @@
 							id="username"
 							type="text"
 							placeholder="Username"
-							class="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-600 border-gray-300 text-gray-900"
+							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 						/>
 					</div>
 					<div class="col-span-full sm:col-span-3">
@@ -110,7 +133,7 @@
 							id="website"
 							type="text"
 							placeholder="https://"
-							class="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-600 border-gray-300 text-gray-900"
+							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 						/>
 					</div>
 					<div class="col-span-full">
@@ -118,7 +141,7 @@
 						<textarea
 							id="bio"
 							placeholder=""
-							class="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-600 border-gray-300 text-gray-900"
+							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 						></textarea>
 					</div>
 					<div class="col-span-full">

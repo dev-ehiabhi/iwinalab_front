@@ -57,7 +57,13 @@ import section_3_image from "@/assets/images/landing/guy.png";
 
 			<div>
 				<div class="grid lg:gap-8 lg:grid-cols-2 lg:items-stretch">
-					<img class="lg:col-start-1" :src="section_1_image" alt="" />
+					<div class="lg:col-start-1 text-center">
+						<div
+							class="grid lg:items-center lg:justify-center pt-10 bg-stone-200"
+						>
+							<img class="" :src="section_1_image" alt="" />
+						</div>
+					</div>
 
 					<div class="lg:col-start-2">
 						<h3
@@ -65,7 +71,7 @@ import section_3_image from "@/assets/images/landing/guy.png";
 						>
 							Challenges
 						</h3>
-						<div class="mt-12 space-y-12">
+						<div class="mt-8 space-y-8">
 							<div class="flex">
 								<div class="flex-shrink-0">
 									<div
@@ -89,7 +95,7 @@ import section_3_image from "@/assets/images/landing/guy.png";
 								</div>
 								<div class="ml-4">
 									<h4
-										class="text-lg font-medium leading-6 text-gray-900"
+										class="text-lg font-medium text-gray-900"
 									>
 										Regulatory Compliance
 									</h4>
@@ -124,7 +130,7 @@ import section_3_image from "@/assets/images/landing/guy.png";
 								</div>
 								<div class="ml-4">
 									<h4
-										class="text-lg font-medium leading-6 text-gray-900"
+										class="text-lg font-medium text-gray-900"
 									>
 										Supply Chain Transparency
 									</h4>
@@ -160,7 +166,7 @@ import section_3_image from "@/assets/images/landing/guy.png";
 								</div>
 								<div class="ml-4">
 									<h4
-										class="text-lg font-medium leading-6 text-gray-900"
+										class="text-lg font-medium text-gray-900"
 									>
 										Product Traceability
 									</h4>

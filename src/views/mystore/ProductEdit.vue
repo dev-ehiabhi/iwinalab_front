@@ -2,8 +2,13 @@
 import { onMounted, ref } from "vue";
 import { useCategoryStore } from "@/stores/modules/category.store";
 import BreadCrumb from "@/components/BreadCrumb.vue";
+import ProductApis from "@/services/apis/ProductApis";
 import { useProductStore } from "@/stores/modules/product.store";
 import Swal from "sweetalert2";
+import { useRouter } from "vue-router";
+import LoadingIndicator from "@/components/LoadingIndicator.vue";
+
+const router = useRouter();
 
 const Toast = Swal.mixin({
 	toast: true,
@@ -17,6 +22,7 @@ const Toast = Swal.mixin({
 	},
 });
 
+const api = ProductApis;
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
 
@@ -26,20 +32,26 @@ onMounted(async () => {
 	await categoryStore.getCategories;
 });
 
-//
-
+// variables
+let loading = ref(true);
+const image = ref(productStore.getProduct.product_image);
 let product_image = ref(null);
+const category_id = ref("");
+const name = ref(productStore.getProduct.name);
+const price = ref(productStore.getProduct.price);
+const description = ref(productStore.getProduct.description);
+
+// functions
+const changeLoadingStatus = (val) => {
+	loading.value = val;
+};
 
 const selectImage = (e) => {
 	product_image.value = e.target.files[0];
 };
 
-const category_id = ref("");
-const name = ref("");
-const price = ref(0);
-const description = ref("");
-
-const createProduct = async () => {
+const updateProduct = async () => {
+	changeLoadingStatus(false);
 	const data = {
 		category_id: category_id.value,
 		name: name.value,
@@ -49,29 +61,34 @@ const createProduct = async () => {
 		user_id: localStorage.getItem("userId"),
 	};
 
-	await productStore.createProduct(data).then(() => {
-		if (productStore.getIsSuccessful) {
+	await api
+		.updateProduct(data)
+		.then((response) => {
 			Toast.fire({
 				icon: "success",
-				title: productStore.getResponseMessage,
+				title: response.data.message,
 			});
 
-			this.$router.push({ path: "/products/product-list" });
-		}
-	});
+			changeLoadingStatus(true);
+
+			router.push({ path: "/my-store/product-list" });
+		})
+		.catch((error) => {});
 };
 </script>
 
 <template>
 	<div class="w-full">
-		<BreadCrumb prev="Products" current="Add New Product"></BreadCrumb>
+		<BreadCrumb prev="Products" current="Edit Product"></BreadCrumb>
 
 		<div class="bg-white w-full border my-8 px-8 shadow-md rounded-lg">
-			<p class="text-2xl font-semibold p-4">Add New Product</p>
+			<p class="text-2xl font-semibold p-4">
+				Edit Product: {{ productStore.getProduct.sku }}
+			</p>
 
 			<p class="text-lg text-gray-500 p-4">File the form below</p>
 
-			<form id="product" @submit.prevent="createProduct()" class="w-full">
+			<form id="product" @submit.prevent="updateProduct()" class="w-full">
 				<fieldset class="w-full border space-y-1 text-gray-500">
 					<label
 						for="files"
@@ -88,8 +105,12 @@ const createProduct = async () => {
 							accept="image/*"
 							@change="selectImage($event)"
 							required
-							class="w-full text-center px-8 py-8 rounded-md text-gray-600"
+							class="w-1/2 text-center px-8 py-8 rounded-md text-gray-600"
 						/>
+
+						<div class="border-b">
+							<img class="" :src="image" alt="" />
+						</div>
 					</div>
 				</fieldset>
 
@@ -130,7 +151,7 @@ const createProduct = async () => {
 							type="text"
 							placeholder="Product Name"
 							required
-							class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-slate-400 focus:ring-slate-300 focus:ring-opacity-40 dark:focus:border-slate-300 focus:outline-none focus:ring"
+							class="block w-full px-4 py-2 mt-2 capitalize text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-slate-400 focus:ring-slate-300 focus:ring-opacity-40 dark:focus:border-slate-300 focus:outline-none focus:ring"
 						/>
 					</div>
 
@@ -168,8 +189,8 @@ const createProduct = async () => {
 						type="text"
 						placeholder="Product Description"
 						required
-						class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-gray-400 focus:ring-gray-300 focus:ring-opacity-40 dark:focus:border-gray-300 focus:outline-none focus:ring"
-					/>
+						class="block w-full px-4 py-2 capitalize text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-gray-400 focus:ring-gray-300 focus:ring-opacity-40 dark:focus:border-gray-300 focus:outline-none focus:ring"
+					></textarea>
 				</div>
 
 				<div class="py-8"></div>
@@ -181,9 +202,18 @@ const createProduct = async () => {
 						Cancel
 					</button>
 					<button
+						v-if="loading"
 						class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-lime-500 rounded-md hover:bg-lime-600 focus:outline-none focus:bg-lime-500"
 					>
-						Create Product
+						Update Product
+					</button>
+					<button
+						v-else
+						type="button"
+						disabled
+						class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-lime-500 rounded-md hover:bg-lime-600 focus:outline-none focus:bg-lime-500"
+					>
+						<span><LoadingIndicator></LoadingIndicator></span>
 					</button>
 				</div>
 			</form>
