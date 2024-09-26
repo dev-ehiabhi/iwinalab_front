@@ -1,4 +1,31 @@
-<script></script>
+<script setup>
+import { onMounted, ref } from "vue";
+import UserApis from "@/services/apis/UserApis";
+import { useUserStore } from "@/stores/modules/user.store";
+
+const api = UserApis;
+const userStore = useUserStore();
+
+const first_name = ref(userStore.getUser.first_name);
+const last_name = ref(userStore.getUser.last_name);
+const email = ref(userStore.getUser.email);
+const phone = ref(userStore.getUser.phone);
+
+const fetchUser = async () => {
+	await api
+		.getUser(localStorage.getItem("userId"))
+		.then((response) => {
+			userStore.setUser(response.data.data);
+		})
+		.catch((error) => {
+			console.error(error.response.data);
+		});
+};
+
+onMounted(() => {
+	fetchUser();
+});
+</script>
 
 <template>
 	<section class="p-6 bg-gray-100 text-gray-900">
@@ -20,6 +47,7 @@
 							>First name</label
 						>
 						<input
+							v-model="first_name"
 							id="firstname"
 							type="text"
 							placeholder="First name"
@@ -30,6 +58,7 @@
 					<div class="col-span-full sm:col-span-3">
 						<label for="lastname" class="text-sm">Last name</label>
 						<input
+							v-model="last_name"
 							id="lastname"
 							type="text"
 							placeholder="Last name"
@@ -40,9 +69,21 @@
 					<div class="col-span-full sm:col-span-3">
 						<label for="email" class="text-sm">Email</label>
 						<input
+							v-model="email"
 							id="email"
 							type="email"
 							placeholder="Email"
+							readonly
+							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+						/>
+					</div>
+					<div class="col-span-full sm:col-span-3">
+						<label for="phone" class="text-sm">Phone Number</label>
+						<input
+							v-model="phone"
+							id="phone"
+							type="phone"
+							placeholder="Phone"
 							readonly
 							class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
 						/>

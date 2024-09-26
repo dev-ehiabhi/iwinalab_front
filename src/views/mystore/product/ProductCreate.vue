@@ -2,13 +2,14 @@
 import { onMounted, ref } from "vue";
 import { useCategoryStore } from "@/stores/modules/category.store";
 import BreadCrumb from "@/components/BreadCrumb.vue";
-import ProductApis from "@/services/apis/ProductApis";
 import { useProductStore } from "@/stores/modules/product.store";
 import Swal from "sweetalert2";
 import { useRouter } from "vue-router";
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
+import ProductApis from "@/services/apis/ProductApis";
 
 const router = useRouter();
+const api = ProductApis;
 
 const Toast = Swal.mixin({
 	toast: true,
@@ -22,7 +23,6 @@ const Toast = Swal.mixin({
 	},
 });
 
-const api = ProductApis;
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
 
@@ -34,12 +34,14 @@ onMounted(async () => {
 
 // variables
 let loading = ref(true);
-const image = ref(productStore.getProduct.product_image);
 let product_image = ref(null);
 const category_id = ref("");
-const name = ref(productStore.getProduct.name);
-const price = ref(productStore.getProduct.price);
-const description = ref(productStore.getProduct.description);
+const name = ref("");
+const price = ref(0);
+const description = ref("");
+
+const price_errors = ref([]);
+const product_image_errors = ref([]);
 
 // functions
 const changeLoadingStatus = (val) => {
@@ -50,7 +52,7 @@ const selectImage = (e) => {
 	product_image.value = e.target.files[0];
 };
 
-const updateProduct = async () => {
+const createProduct = async () => {
 	changeLoadingStatus(false);
 	const data = {
 		category_id: category_id.value,
@@ -62,7 +64,7 @@ const updateProduct = async () => {
 	};
 
 	await api
-		.updateProduct(data)
+		.createProduct(data)
 		.then((response) => {
 			Toast.fire({
 				icon: "success",
@@ -70,25 +72,43 @@ const updateProduct = async () => {
 			});
 
 			changeLoadingStatus(true);
-
 			router.push({ path: "/my-store/product-list" });
 		})
-		.catch((error) => {});
+		.catch((error) => {
+			changeLoadingStatus(true);
+			if (error.response.data.data.price) {
+				price_errors.value = error.response.data.data.price;
+			}
+			if (error.response.data.data.product_image) {
+				product_image_errors.value =
+					error.response.data.data.product_image;
+			}
+		});
+
+	// await productStore.createProduct(data).then(() => {
+	// 	if (productStore.getIsSuccessful) {
+	// 		Toast.fire({
+	// 			icon: "success",
+	// 			title: productStore.getResponseMessage,
+	// 		});
+
+	// 		router.push({ path: "/my-store/product-list" });
+	// 	}
+	// 	changeLoadingStatus(true);
+	// });
 };
 </script>
 
 <template>
 	<div class="w-full">
-		<BreadCrumb prev="Products" current="Edit Product"></BreadCrumb>
+		<BreadCrumb prev="Products" current="Add New Product"></BreadCrumb>
 
 		<div class="bg-white w-full border my-8 px-8 shadow-md rounded-lg">
-			<p class="text-2xl font-semibold p-4">
-				Edit Product: {{ productStore.getProduct.sku }}
-			</p>
+			<p class="text-2xl font-semibold p-4">Add New Product</p>
 
 			<p class="text-lg text-gray-500 p-4">File the form below</p>
 
-			<form id="product" @submit.prevent="updateProduct()" class="w-full">
+			<form id="product" @submit.prevent="createProduct()" class="w-full">
 				<fieldset class="w-full border space-y-1 text-gray-500">
 					<label
 						for="files"
@@ -105,13 +125,16 @@ const updateProduct = async () => {
 							accept="image/*"
 							@change="selectImage($event)"
 							required
-							class="w-1/2 text-center px-8 py-8 rounded-md text-gray-600"
+							class="w-full text-center px-8 py-8 rounded-md text-gray-600"
 						/>
-
-						<div class="border-b">
-							<img class="" :src="image" alt="" />
-						</div>
 					</div>
+					<p
+						v-show="product_image_errors"
+						v-for="error in product_image_errors"
+						class="text-red-400 text-xs"
+					>
+						{{ error }}
+					</p>
 				</fieldset>
 
 				<div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
@@ -158,13 +181,6 @@ const updateProduct = async () => {
 					<div>
 						<fieldset class="w-full space-y-1 text-gray-800">
 							<div class="flex">
-								<!-- <input
-									type="text"
-									name="price"
-									id="price"
-									placeholder="99 999,99"
-									class="flex flex-1 text-right border sm:text-sm rounded-l-md focus:ring-inset border-gray-300 text-gray-800 bg-gray-100 focus:ring-violet-600"
-								/> -->
 								<input
 									v-model="price"
 									id="price"
@@ -178,6 +194,13 @@ const updateProduct = async () => {
 									>N</span
 								>
 							</div>
+							<p
+								v-show="price_errors"
+								v-for="error in price_errors"
+								class="text-red-400 text-xs"
+							>
+								{{ error }}
+							</p>
 						</fieldset>
 					</div>
 				</div>
@@ -196,16 +219,17 @@ const updateProduct = async () => {
 				<div class="py-8"></div>
 
 				<div class="flex justify-end my-6">
-					<button
+					<RouterLink
+						to="/my-store/product-list"
 						class="bg-slate-50 px-8 py-2.5 mr-4 leading-5 border transition-colors duration-300 transform rounded-md focus:outline-none"
 					>
 						Cancel
-					</button>
+					</RouterLink>
 					<button
 						v-if="loading"
 						class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-lime-500 rounded-md hover:bg-lime-600 focus:outline-none focus:bg-lime-500"
 					>
-						Update Product
+						Create Product
 					</button>
 					<button
 						v-else

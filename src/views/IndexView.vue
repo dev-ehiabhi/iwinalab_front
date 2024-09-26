@@ -1204,7 +1204,7 @@ import section_3_image from "@/assets/images/landing/guy.png";
 					<p class="text-sm text-gray-500 dark:text-gray-400">
 						Give us a call during office hours
 					</p>
-					<p class="mt-4 text-sm underline">(02) 9000-9090</p>
+					<p class="mt-4 text-sm underline">070-8550-1088</p>
 				</div>
 
 				<div class="px-4 rounded-lg bg-blue-50 md:p-6 dark:bg-gray-800">
@@ -1291,7 +1291,7 @@ import section_3_image from "@/assets/images/landing/guy.png";
 						Visit our office HQ..
 					</p>
 					<p class="mt-4 text-sm underline">
-						Ikpoba Slope, Benin City
+						152, Ikpoba Slope, Benin City
 					</p>
 				</div>
 			</div>

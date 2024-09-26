@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import useDetectOutsideClick from "./useDetectOutsideClick.vue";
 import logo from "@/assets/images/general/iwina_logo.png";
-import NavBar from "@/components/NavBar.vue";
 
 const componentRef = ref();
 const toggle_status = ref(false);
@@ -34,7 +33,7 @@ useDetectOutsideClick(componentRef, () => {
 
 				<!-- Mobile menu button -->
 				<!-- <div ref="componentRef" class="flex md:hidden"> -->
-				<div ref="componentRef" class="flex md:hidden">
+				<div class="flex md:hidden">
 					<button
 						@click.stop="changeToggleStatus"
 						type="button"
@@ -377,13 +376,15 @@ useDetectOutsideClick(componentRef, () => {
 					<RouterLink
 						to="/login"
 						class="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
-						>Login</RouterLink
 					>
+						Login
+					</RouterLink>
 					<RouterLink
 						to="/contact-us"
 						class="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
-						>Contact</RouterLink
 					>
+						Contact
+					</RouterLink>
 				</div>
 			</div>
 		</div>

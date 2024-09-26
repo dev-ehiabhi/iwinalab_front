@@ -40,4 +40,5 @@ export const useDashboardStore = defineStore("DashboardStore", {
 			}
 		},
 	},
+	persist: true,
 });

@@ -14,7 +14,7 @@ export default {
 	},
 
 	getUserProducts(id) {
-		return axios.get(`/user/${id}/products`);
+		return axios.get(`/users/${id}/products`);
 		// return axios.get("/own_products", { params: { id: data } });
 	},
 
@@ -23,10 +23,10 @@ export default {
 	},
 
 	deleteProduct(id) {
-		return axios.delete("/products" + id);
+		return axios.delete(`/products/${id}`);
 	},
 
-	// getCategories() {
-	// 	return axios.get("/categories");
-	// },
+	deleteOwnProduct(product) {
+		return axios.delete(`/users/${product.user_id}/products/${product.id}`);
+	},
 };

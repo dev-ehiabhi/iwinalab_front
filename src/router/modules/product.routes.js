@@ -2,37 +2,48 @@ import AuthLayout from "@/layouts/AuthLayout.vue";
 
 const productRoutes = [
 	{
-		path: "/marketplace",
-		component: AuthLayout,
-		children: [
-			{
-				path: "",
-				name: "Marketplace",
-				component: () => import("@/views/products/MarketPlace.vue"),
-				meta: { requiresAuth: true },
-			},
-		],
-	},
-	{
 		path: "/my-store",
 		component: AuthLayout,
 		children: [
 			{
+				path: "statistic",
+				name: "Statistic",
+				component: () => import("@/views/mystore/StoreStatistic.vue"),
+				meta: { requiresAuth: true },
+			},
+			{
 				path: "product-list",
 				name: "ProductIndex",
-				component: () => import("@/views/mystore/ProductIndex.vue"),
+				component: () =>
+					import("@/views/mystore/product/ProductIndex.vue"),
 				meta: { requiresAuth: true },
 			},
 			{
 				path: "products/add-product",
 				name: "ProductCreate",
-				component: () => import("@/views/mystore/ProductCreate.vue"),
+				component: () =>
+					import("@/views/mystore/product/ProductCreate.vue"),
+				meta: { requiresAuth: true },
+			},
+			{
+				path: "products/add-product-details/:id",
+				name: "AddProductDetails",
+				component: () =>
+					import("@/views/mystore/product/ProductAddDetails.vue"),
+				meta: { requiresAuth: true },
+			},
+			{
+				path: "products/add-product-compliance/:id",
+				name: "AddProductCompliance",
+				component: () =>
+					import("@/views/mystore/product/ProductAddCompliance.vue"),
 				meta: { requiresAuth: true },
 			},
 			{
 				path: "products/edit-product/:id",
 				name: "ProductUpdate",
-				component: () => import("@/views/mystore/ProductEdit.vue"),
+				component: () =>
+					import("@/views/mystore/product/ProductEdit.vue"),
 				meta: { requiresAuth: true },
 			},
 		],

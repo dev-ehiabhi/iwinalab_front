@@ -51,7 +51,7 @@ export default defineComponent({
 		<div class="w-full flex flex-wrap -mx-3 mb-20">
 			<div class="px-3">
 				<div
-					class="w-full bg-white border text-blue-400 rounded-lg flex items-center p-6 mb-6 xl:mb-0"
+					class="w-full bg-white border text-lime-400 rounded-lg flex items-center p-6 mb-6 xl:mb-0"
 				>
 					<svg
 						class="w-16 h-16 fill-current mr-4 hidden lg:block"
@@ -71,7 +71,7 @@ export default defineComponent({
 
 			<div class="px-3">
 				<div
-					class="w-full bg-white border text-blue-400 rounded-lg flex items-center p-6 mb-6 xl:mb-0"
+					class="w-full bg-white border text-lime-400 rounded-lg flex items-center p-6 mb-6 xl:mb-0"
 				>
 					<svg
 						class="w-16 h-16 fill-current mr-4 hidden lg:block"
@@ -91,7 +91,7 @@ export default defineComponent({
 
 			<div class="px-3">
 				<div
-					class="w-full bg-white border text-blue-400 rounded-lg flex items-center p-6"
+					class="w-full bg-white border text-lime-400 rounded-lg flex items-center p-6"
 				>
 					<svg
 						class="w-16 h-16 fill-current mr-4 hidden lg:block"
@@ -111,7 +111,7 @@ export default defineComponent({
 
 			<div class="px-3">
 				<div
-					class="w-full bg-white border text-blue-400 rounded-lg flex items-center p-6"
+					class="w-full bg-white border text-lime-400 rounded-lg flex items-center p-6"
 				>
 					<svg
 						class="w-16 h-16 fill-current mr-4 hidden lg:block"

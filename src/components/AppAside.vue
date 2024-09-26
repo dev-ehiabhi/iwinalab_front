@@ -1,14 +1,12 @@
 <script setup>
+import { onMounted, ref } from "vue";
 import logo from "@/assets/images/general/iwina_logo.png";
-
-const auth_store = useAuthStore();
-</script>
-
-<script>
-import { defineComponent } from "vue";
-import { useAuthStore } from "@/stores/auth_store";
 import Swal from "sweetalert2";
 import AuthApis from "@/services/apis/AuthApis";
+import UserApis from "@/services/apis/UserApis";
+import { useAuthStore } from "@/stores/auth_store";
+import { useUserStore } from "@/stores/modules/user.store";
+import { useRouter } from "vue-router";
 
 const Toast = Swal.mixin({
 	toast: true,
@@ -23,40 +21,70 @@ const Toast = Swal.mixin({
 });
 
 const api = AuthApis;
-export default defineComponent({
-	name: "AppAside",
+const _api = UserApis;
+const authStore = useAuthStore();
+const userStore = useUserStore();
+const router = useRouter();
 
-	methods: {
-		logout() {
-			const authStore = useAuthStore();
-			api.logoutUser()
-				.then((response) => {
-					Toast.fire({
-						icon: "success",
-						title: response.data.message,
-					});
-					localStorage.clear();
-					authStore.$reset();
-					this.$router.push({ path: "/" });
-				})
-				.catch((error) => {
-					Toast.fire({
-						icon: "error",
-						title: error.response.data.message,
-					});
-				});
-		},
+const items = ref([
+	{
+		title: "My Store",
+		content: "This is the first item's accordion body.",
 	},
+	{
+		title: "Accordion Item #2",
+		content: "This is the second item's accordion body.",
+	},
+]);
+
+const activeIndex = ref(null);
+
+const toggle = (index) => {
+	activeIndex.value = activeIndex.value === index ? null : index;
+};
+
+onMounted(() => {
+	fetchUser();
 });
+
+const fetchUser = async () => {
+	await _api
+		.getUser(localStorage.getItem("userId"))
+		.then((response) => {
+			userStore.setUser(response.data.data);
+		})
+		.catch((error) => {
+			console.error(error.response.data);
+		});
+};
+
+const logout = () => {
+	api.logoutUser()
+		.then((response) => {
+			Toast.fire({
+				icon: "success",
+				title: response.data.message,
+			});
+			localStorage.clear();
+			authStore.$reset();
+			router.push({ path: "/" });
+		})
+		.catch((error) => {
+			Toast.fire({
+				icon: "error",
+				title: error.response.data.message,
+			});
+		});
+};
 </script>
 
 <template>
 	<aside
-		class="flex flex-col h-screen px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700"
+		class="md:flex flex-col h-screen px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700"
 	>
-		<a href="#">
+		<RouterLink to="/dashboard">
 			<img class="w-auto h-8" :src="logo" alt="Iwina Logo" />
-		</a>
+		</RouterLink>
 
 		<div class="flex flex-col justify-between mt-6">
 			<nav class="-mx-3 space-y-3">
@@ -150,13 +178,14 @@ export default defineComponent({
 						/>
 					</svg>
 
-					<span class="mx-2 text-sm font-medium"
-						>Compliance Tools</span
-					>
+					<span class="mx-2 text-sm font-medium">
+						Compliance Tools
+					</span>
 				</RouterLink>
 
 				<RouterLink
 					to="/training-resources"
+					v-show="userStore.getUser.role_id == 200"
 					class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
 				>
 					<svg
@@ -178,6 +207,37 @@ export default defineComponent({
 						>Training Resources</span
 					>
 				</RouterLink>
+
+				<div v-show="false" class="space-y-4">
+					<div
+						v-for="(item, index) in items"
+						:key="index"
+						class="rounded-lg"
+					>
+						<h2>
+							<button
+								@click="toggle(index)"
+								class="w-full text-left px-4 py-2 rounded-t-lg focus:outline-none"
+							>
+								{{ item.title }}
+							</button>
+						</h2>
+						<transition name="fade">
+							<div
+								v-if="activeIndex === index"
+								class="px-4 py-2 bg-white border-t border-gray-200"
+							>
+								<p>{{ item.content }}</p>
+								<RouterLink to="/my-store/product-list">
+									View Products
+								</RouterLink>
+								<RouterLink to="/my-store/products/add-product">
+									Add Product
+								</RouterLink>
+							</div>
+						</transition>
+					</div>
+				</div>
 
 				<RouterLink
 					to="/my-store/product-list"
@@ -246,6 +306,7 @@ export default defineComponent({
 				</RouterLink>
 
 				<a
+					v-show="userStore.getUser.role_id == 200"
 					class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
 					href="#"
 				>
@@ -324,8 +385,8 @@ export default defineComponent({
 						/>
 						<span
 							class="text-sm font-medium text-gray-700 dark:text-gray-200"
-							>{{ auth_store.getFirstName }}
-							{{ auth_store.getLastName }}</span
+							>{{ userStore.getUser.first_name }}
+							{{ authStore.getLastName }}</span
 						>
 					</a>
 
@@ -355,3 +416,14 @@ export default defineComponent({
 		</div>
 	</aside>
 </template>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.5s;
+}
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
+}
+</style>

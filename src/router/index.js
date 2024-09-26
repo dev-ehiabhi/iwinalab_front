@@ -2,11 +2,19 @@ import { createRouter, createWebHistory } from "vue-router";
 import guestRoutes from "@/router/modules/guest.routes";
 import dashboardRoutes from "@/router/modules/dashboard.routes";
 import productRoutes from "@/router/modules/product.routes";
+import marketplaceRoutes from "./modules/marketplace.routes";
+import complianceRoutes from "./modules/compliance.routes";
 import { useAuthStore } from "@/stores/auth_store";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
-	routes: [...guestRoutes, ...dashboardRoutes, ...productRoutes],
+	routes: [
+		...guestRoutes,
+		...dashboardRoutes,
+		...productRoutes,
+		...marketplaceRoutes,
+		...complianceRoutes,
+	],
 });
 
 router.beforeEach((to, from) => {

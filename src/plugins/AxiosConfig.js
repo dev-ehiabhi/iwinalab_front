@@ -5,7 +5,7 @@ import router from "@/router";
 const url =
 	process.env.NODE_ENV !== "production"
 		? "http://localhost:8000/api/v1"
-		: "https://admin.iwinalab.org/api/v1";
+		: "https://admin.iwinalab.com/api/v1";
 
 const AxiosConfig = axios.create({
 	baseURL: url,

@@ -109,7 +109,7 @@ import man_squat from "@/assets/images/about/man_squat.png";
 			<div
 				class="grid grid-cols-1 gap-4 mt-10 lg:grid-cols-4 sm:grid-cols-2 p-8 rounded-lg"
 			>
-				<div class="px-4 rounded-lg bg-white md:p-6">
+				<div class="p-4 rounded-lg bg-white md:p-6">
 					<CheckBadge></CheckBadge>
 
 					<h2
@@ -123,7 +123,7 @@ import man_squat from "@/assets/images/about/man_squat.png";
 					</p>
 				</div>
 
-				<div class="px-4 rounded-lg bg-white md:p-6 dark:bg-gray-800">
+				<div class="p-4 rounded-lg bg-white md:p-6 dark:bg-gray-800">
 					<CheckBadge></CheckBadge>
 
 					<h2
@@ -137,7 +137,7 @@ import man_squat from "@/assets/images/about/man_squat.png";
 					</p>
 				</div>
 
-				<div class="px-4 rounded-lg bg-white md:p-6 dark:bg-gray-800">
+				<div class="p-4 rounded-lg bg-white md:p-6 dark:bg-gray-800">
 					<CheckBadge></CheckBadge>
 
 					<h2
@@ -151,7 +151,7 @@ import man_squat from "@/assets/images/about/man_squat.png";
 					</p>
 				</div>
 
-				<div class="px-4 rounded-lg bg-white md:p-6 dark:bg-gray-800">
+				<div class="p-4 rounded-lg bg-white md:p-6 dark:bg-gray-800">
 					<CheckBadge></CheckBadge>
 
 					<h2
