@@ -3,6 +3,7 @@ import { onMounted } from "vue";
 import { useMarketplaceStore } from "@/stores/modules/marketplace.store";
 import MarketplaceApis from "@/services/apis/MarketplaceApis";
 import { useRouter } from "vue-router";
+import RatingStar from "@/components/icons/RatingStar.vue";
 
 const api = MarketplaceApis;
 const router = useRouter();
@@ -26,46 +27,57 @@ onMounted(() => {
 });
 
 const viewProductDetails = (product) => {
-	// marketplaceStore.setProduct(product);
-	localStorage.setItem("id", product.id);
+	marketplaceStore.setProduct(product);
+	// localStorage.setItem("id", product.id);
 	router.push({ path: "/marketplace/product-details/" + product.sku });
 };
 </script>
 
 <template>
-	<div class="w-full">
+	<div class="w-full mx-auto">
 		<h1 class="pb-8 text-gray-500 text-3xl font-nunito font-medium">
 			Marketplace
 		</h1>
 
-		<section class="text-gray-600 body-font">
-			<div class="container px-5 py-8 mx-auto">
-				<div class="flex flex-wrap -m-4">
+		<section class="text-gray-600 border px-4 rounded-md">
+			<div class="w-full py-8 mx-auto">
+				<div class="flex flex-wrap justify-start gap-x-4 gap-y-8">
 					<div
 						v-for="(product, index) in marketplaceStore.getProducts"
 						:key="product.id"
-						@click="viewProductDetails(product)"
-						class="lg:w-1/4 md:w-1/2 m-4 w-full cursor-pointer"
+						class="sm:w-[30%] border rounded-md p-4 w-[45%]"
 					>
-						<a class="block relative h-48 rounded overflow-hidden">
+						<a
+							@click="viewProductDetails(product)"
+							class="block relative h-48 rounded overflow-hidden cursor-pointer"
+						>
 							<img
+								v-if="product.product_image"
 								:alt="product.product_image"
 								class="object-cover object-center w-full h-full block"
 								:src="product.product_image"
 							/>
+							<p v-else>...</p>
 						</a>
-						<div class="mt-4">
-							<!-- <h3
-								class="text-gray-500 text-xs tracking-widest title-font mb-1"
-							>
-								CATEGORY
-							</h3> -->
+						<div class="pt-1">
 							<h2
-								class="text-gray-900 capitalize title-font text-lg"
+								@click="viewProductDetails(product)"
+								class="text-gray-600 capitalize title-font text-lg cursor-pointer"
 							>
 								{{ product.name }}
 							</h2>
-							<p class="font-medium">N {{ product.price }}</p>
+							<p class="line-clamp-3 py-2 text-xs">
+								{{ product.description }}
+							</p>
+							<p class="text-sm font-medium flex justify-between">
+								<span class="text-lime-600"
+									>N {{ product.price }}</span
+								>
+								<span class="inline-flex">
+									<RatingStar class="space-x-2"></RatingStar>
+									4.5</span
+								>
+							</p>
 						</div>
 					</div>
 				</div>

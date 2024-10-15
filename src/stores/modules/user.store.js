@@ -20,4 +20,8 @@ export const useUserStore = defineStore("UserStore", {
 			// this.user = {name: 'yuyuy'}
 		},
 	},
+	persist: {
+		storage: localStorage,
+		paths: ["user"],
+	},
 });

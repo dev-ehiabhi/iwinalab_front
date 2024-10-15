@@ -61,4 +61,8 @@ export const useProductStore = defineStore("ProductStore", {
 			}
 		},
 	},
+	persist: {
+		storage: localStorage,
+		path: ["product"],
+	},
 });

@@ -24,11 +24,11 @@ useDetectOutsideClick(componentRef, () => {
 </script>
 
 <template>
-	<nav class="relative bg-white shadow-lg dark:bg-gray-800">
+	<nav class="fixed w-full bg-white shadow-lg dark:bg-gray-800 z-50">
 		<div class="px-6 md:px-8 py-3 mx-auto md:flex">
 			<div class="flex items-center justify-between">
 				<RouterLink to="/">
-					<img class="w-auto h-8 lg:10" :src="logo" alt="" />
+					<img class="w-auto h-6 lg:h-8 xl:h-10" :src="logo" alt="" />
 				</RouterLink>
 
 				<!-- Mobile menu button -->
@@ -85,16 +85,16 @@ useDetectOutsideClick(componentRef, () => {
 				class="absolute inset-x-0 z-20 w-full py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 md:mt-0 md:p-0 md:top-0 md:relative md:opacity-100 md:translate-x-0 md:flex md:items-center md:justify-between"
 			>
 				<div
-					class="flex flex-col px-4 md:px-2 -mx-4 md:flex-row md:mx-10 md:py-0"
+					class="flex flex-col px-4 md:px-2 -mx-4 md:flex-row lg:mx-10 md:mx-4 md:py-0"
 				>
 					<RouterLink
 						to="/"
-						class="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
-						>Home</RouterLink
-					>
+						class="px-2 md:px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+						>Home
+					</RouterLink>
 					<a
 						href="#"
-						class="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
+						class="px-2 md:px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
 					>
 						<!-- Toggle Button -->
 						<button
@@ -362,26 +362,32 @@ useDetectOutsideClick(componentRef, () => {
 
 					<RouterLink
 						to="/about-us"
-						class="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2 whitespace-nowrap"
+						class="px-2 md:px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2 whitespac"
 						>About Us</RouterLink
 					>
 					<a
 						href="#"
-						class="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
+						class="px-2 md:px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
 						>Blog</a
 					>
 				</div>
 
-				<div class="relative mt-4 md:mt-0">
+				<div class="relative flex mt-4 md:mt-0">
+					<RouterLink
+						to="/register"
+						class="px-2 md:px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+					>
+						Register
+					</RouterLink>
 					<RouterLink
 						to="/login"
-						class="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
+						class="px-2 md:px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
 					>
 						Login
 					</RouterLink>
 					<RouterLink
 						to="/contact-us"
-						class="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
+						class="px-2 md:px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
 					>
 						Contact
 					</RouterLink>

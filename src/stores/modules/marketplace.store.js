@@ -23,5 +23,8 @@ export const useMarketplaceStore = defineStore("MarketplaceStore", {
 			this.product = product;
 		},
 	},
-	// persist: true,
+	persist: {
+		storage: localStorage,
+		paths: ["product"],
+	},
 });

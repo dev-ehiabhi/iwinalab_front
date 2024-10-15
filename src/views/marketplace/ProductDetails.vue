@@ -2,15 +2,18 @@
 import { useMarketplaceStore } from "@/stores/modules/marketplace.store";
 import { useShoppingcartStore } from "@/stores/modules/shoppingcart.store";
 import MarketplaceApis from "@/services/apis/MarketplaceApis";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
+import RatingStar from "@/components/icons/RatingStar.vue";
 
 const marketplaceStore = useMarketplaceStore();
 const shoppingcartStore = useShoppingcartStore();
 const api = MarketplaceApis;
 
+const toggler = ref(true);
+
 const fetchProductDetails = async () => {
 	await api
-		.getProduct(localStorage.getItem("id"))
+		.getProduct(marketplaceStore.getProduct.id)
 		.then((response) => {
 			marketplaceStore.setProduct(response.data.data);
 		})
@@ -26,97 +29,61 @@ onMounted(() => {
 const addToCart = (product) => {
 	shoppingcartStore.addToCart(product);
 };
+
+const toggleTab = (val) => {
+	toggler.value = val;
+};
 </script>
 
 <template>
 	<RouterLink to="/marketplace/shopping-cart">Cart</RouterLink>
-	<section class="text-gray-600 body-font overflow-hidden">
-		<div class="px-5 py-12 mx-auto">
-			<div class="mx-auto flex flex-wrap h-64">
-				<img
-					:alt="marketplaceStore.getProduct.name"
-					class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-					:src="marketplaceStore.getProduct.product_image"
-				/>
-				<div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-					<!-- <h2
-						class="text-sm title-font text-gray-500 tracking-widest"
-					>
-						{{ marketplaceStore.getProduct.name }}
-					</h2> -->
+	<section class="text-gray-600 body-font border rounded-md">
+		<div class="px-5 py-8 mx-auto">
+			<div class="mx-auto flex flex-wrap gap-4">
+				<div class="md:w-[40%] h-auto w-full flex flex-col">
+					<img
+						:alt="marketplaceStore.getProduct.name"
+						class="w-full md:h-96 object-cover object-center rounded"
+						:src="marketplaceStore.getProduct.product_image"
+					/>
+					<div class="flex gap-x-4 h-16 w-16 mt-2">
+						<img
+							:alt="marketplaceStore.getProduct.name"
+							class="w-full lg:h-auto h-16 object-cover object-center rounded"
+							:src="marketplaceStore.getProduct.product_image"
+						/>
+
+						<img
+							:alt="marketplaceStore.getProduct.name"
+							class="w-full lg:h-auto h-16 object-cover object-center rounded"
+							:src="marketplaceStore.getProduct.product_image"
+						/>
+					</div>
+				</div>
+				<div
+					class="xl:w-[60%] lg:w-[57%] md:w-[55%] w-full mx-auto lg:px-4 px-2 border rounded-md md:py-4 lg:mt-0"
+				>
 					<h1
-						class="text-gray-900 text-3xl title-font font-medium mb-1"
+						class="text-gray-900 text-3xl capitalize font-medium mb-1"
 					>
 						{{ marketplaceStore.getProduct.name }}
 					</h1>
+					<h2
+						class="text-gray-900 text-3xl py-4 capitalize font-medium"
+					>
+						${{ marketplaceStore.getProduct.price }}
+					</h2>
 					<div class="flex mb-4">
 						<span class="flex items-center">
-							<svg
-								fill="currentColor"
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								class="w-4 h-4 text-lime-500"
-								viewBox="0 0 24 24"
+							<RatingStar></RatingStar>
+							<RatingStar></RatingStar>
+							<RatingStar></RatingStar>
+							<RatingStar></RatingStar>
+							<span class="text-gray-600 ml-3"
+								>4.0 Star Rating</span
+							><span class="text-gray-600 text-sm ml-3"
+								>(4 Reviews)</span
 							>
-								<path
-									d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-								></path>
-							</svg>
-							<svg
-								fill="currentColor"
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								class="w-4 h-4 text-lime-500"
-								viewBox="0 0 24 24"
-							>
-								<path
-									d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-								></path>
-							</svg>
-							<svg
-								fill="currentColor"
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								class="w-4 h-4 text-lime-500"
-								viewBox="0 0 24 24"
-							>
-								<path
-									d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-								></path>
-							</svg>
-							<svg
-								fill="currentColor"
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								class="w-4 h-4 text-lime-500"
-								viewBox="0 0 24 24"
-							>
-								<path
-									d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-								></path>
-							</svg>
-							<svg
-								fill="none"
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								class="w-4 h-4 text-lime-500"
-								viewBox="0 0 24 24"
-							>
-								<path
-									d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-								></path>
-							</svg>
-							<span class="text-gray-600 ml-3">4 Reviews</span>
 						</span>
 						<!-- <span
 							class="flex ml-3 pl-3 py-2 border-l-2 border-gray-200 space-x-2s"
@@ -165,9 +132,12 @@ const addToCart = (product) => {
 							</a>
 						</span> -->
 					</div>
-					<p class="leading-relaxed">
-						{{ marketplaceStore.getProduct.description }}
-					</p>
+					<h2 class="py-2 font-medium">Features</h2>
+					<p
+						class="leading-relaxed"
+						v-html="marketplaceStore.getProduct.features"
+					></p>
+					<div class="pb-4 pt-2 border-b"></div>
 					<!-- <div
 						class="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5"
 					>
@@ -212,11 +182,11 @@ const addToCart = (product) => {
 							</div>
 						</div>
 					</div> -->
-					<div class="flex">
-						<span
+					<div class="flex py-2.5">
+						<!-- <span
 							class="title-font font-medium text-2xl text-gray-900"
 							>N {{ marketplaceStore.getProduct.price }}</span
-						>
+						> -->
 						<button
 							@click="addToCart(marketplaceStore.getProduct)"
 							class="flex ml-auto text-white bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded"
@@ -243,5 +213,33 @@ const addToCart = (product) => {
 				</div>
 			</div>
 		</div>
+
+		<div
+			class="flex mx-8 pt-8 overflow-x-auto overflow-y-hidden border-b border-gray-200 whitespace-nowrap dark:border-gray-700"
+		>
+			<button
+				@click="toggleTab(true)"
+				class="inline-flex items-center h-10 px-4 -mb-px text-sm text-center text-blue-600 bg-transparent border-b-2 border-blue-500 sm:text-base dark:border-blue-400 dark:text-blue-300 whitespace-nowrap focus:outline-none"
+			>
+				Description
+			</button>
+
+			<button
+				@click="toggleTab(false)"
+				class="inline-flex items-center h-10 px-4 -mb-px text-sm text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:text-base dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400"
+			>
+				Review
+			</button>
+		</div>
+
+		<p v-if="toggler" class="p-8">
+			{{ marketplaceStore.getProduct.description }}
+		</p>
+		<p v-else class="p-8">
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta
+			obcaecati officia ipsa eos sequi quo quibusdam neque fugiat, sed
+			eius? Commodi eligendi labore excepturi eos nemo ea architecto.
+			Quas, veniam.
+		</p>
 	</section>
 </template>

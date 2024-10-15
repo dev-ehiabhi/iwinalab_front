@@ -7,9 +7,25 @@ import Swal from "sweetalert2";
 import { useRouter } from "vue-router";
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
 import ProductApis from "@/services/apis/ProductApis";
+import {
+	ClassicEditor,
+	Bold,
+	Essentials,
+	Font,
+	Heading,
+	Italic,
+	List,
+	Mention,
+	Paragraph,
+	Underline,
+	Undo,
+} from "ckeditor5";
+import { Ckeditor } from "@ckeditor/ckeditor5-vue";
+import "ckeditor5/ckeditor5.css";
 
 const router = useRouter();
 const api = ProductApis;
+const editor = ClassicEditor;
 
 const Toast = Swal.mixin({
 	toast: true,
@@ -39,9 +55,41 @@ const category_id = ref("");
 const name = ref("");
 const price = ref(0);
 const description = ref("");
+const features = ref("");
 
 const price_errors = ref([]);
 const product_image_errors = ref([]);
+
+const editorConfig = ref({
+	plugins: [
+		Bold,
+		Essentials,
+		Font,
+		Heading,
+		Italic,
+		List,
+		Mention,
+		Paragraph,
+		Underline,
+		Undo,
+	],
+	toolbar: [
+		"heading",
+		"|",
+		"undo",
+		"redo",
+		"|",
+		"bold",
+		"italic",
+		"underline",
+		"bulletedList",
+		"numberedList",
+		"fontSize",
+		"fontFamily",
+		"fontColor",
+		"fontBackgroundColor",
+	],
+});
 
 // functions
 const changeLoadingStatus = (val) => {
@@ -61,6 +109,7 @@ const createProduct = async () => {
 		price: price.value,
 		product_image: product_image.value,
 		user_id: localStorage.getItem("userId"),
+		features: features.value,
 	};
 
 	await api
@@ -214,6 +263,14 @@ const createProduct = async () => {
 						required
 						class="block w-full px-4 py-2 capitalize text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-gray-400 focus:ring-gray-300 focus:ring-opacity-40 dark:focus:border-gray-300 focus:outline-none focus:ring"
 					></textarea>
+				</div>
+
+				<div class="mt-8">
+					<ckeditor
+						v-model="features"
+						:editor="editor"
+						:config="editorConfig"
+					/>
 				</div>
 
 				<div class="py-8"></div>

@@ -1,12 +1,31 @@
 <script setup>
+import { onMounted, ref } from "vue";
 import section_1_image from "@/assets/images/landing/challenges.png";
 import section_2_image from "@/assets/images/landing/harvest.png";
 import section_3_image from "@/assets/images/landing/guy.png";
+
+const solutions = ref(null);
+const goToSolution = () => {
+	// solutions.value.$el.scrollIntoView({ behavior: "smooth" });
+	document
+		.getElementById("solutions")
+		?.scrollIntoView({ behavior: "smooth" });
+};
+
+const clearLocalStorage = () => {
+	if (localStorage.getItem("token")) {
+		localStorage.clear();
+	}
+};
+
+onMounted(() => {
+	clearLocalStorage();
+});
 </script>
 
 <template>
 	<div
-		class="w-full h-screen bg-blend-color-burn bg-no-repeat bg-cover bg-center bg-[url('/src/assets/images/landing/hero_section.jpg')]"
+		class="w-full h-screen pt-8 bg-blend-color-burn bg-no-repeat bg-cover bg-center bg-[url('/src/assets/images/landing/hero_section.jpg')]"
 	>
 		<header class="bg-gray-400 bg-transparent bg-blend-overlay font-nunito">
 			<!-- <img src="" alt="">  -->
@@ -25,11 +44,12 @@ import section_3_image from "@/assets/images/landing/guy.png";
 						<div
 							class="mt-10 flex items-center justify-start gap-x-6"
 						>
-							<a
-								href="#"
-								class="rounded-md bg-lime-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600"
-								>Explore our Solutions</a
+							<button
+								@click="goToSolution"
+								class="rounded-md bg-lime-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 z-0"
 							>
+								Explore our Solutions
+							</button>
 						</div>
 					</div>
 				</div>
@@ -648,7 +668,11 @@ import section_3_image from "@/assets/images/landing/guy.png";
 
 	<div class="my-12"></div>
 
-	<div class="bg-lime-50 text-gray-800 font-nunito">
+	<!-- Solutions -->
+	<div
+		id="solutions"
+		class="bg-lime-50 text-gray-800 font-nunito scroll-smooth"
+	>
 		<div class="px-4 py-16 mx-auto max-w-7xl sm:px-6 lg:px-8">
 			<div class="max-w-3xl mx-auto text-center">
 				<h2 class="text-3xl font-medium sm:text-4xl">Our Solution</h2>
@@ -905,6 +929,7 @@ import section_3_image from "@/assets/images/landing/guy.png";
 		</article>
 	</section> -->
 
+	<!-- Market Opportunity -->
 	<section class="bg-blue-50 font-nunito">
 		<article class="p-16">
 			<div class="text-center">

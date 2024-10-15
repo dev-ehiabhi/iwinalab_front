@@ -4,6 +4,7 @@ import dashboardRoutes from "@/router/modules/dashboard.routes";
 import productRoutes from "@/router/modules/product.routes";
 import marketplaceRoutes from "./modules/marketplace.routes";
 import complianceRoutes from "./modules/compliance.routes";
+import auditRoutes from "./modules/audit.routes";
 import { useAuthStore } from "@/stores/auth_store";
 
 const router = createRouter({
@@ -14,6 +15,7 @@ const router = createRouter({
 		...productRoutes,
 		...marketplaceRoutes,
 		...complianceRoutes,
+		...auditRoutes,
 	],
 });
 

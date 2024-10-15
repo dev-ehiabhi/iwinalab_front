@@ -41,6 +41,16 @@ const guestRoutes = [
 			},
 		],
 	},
+	{
+		path: "/page-not-found",
+		name: "NotFound",
+		component: () => import("@/views/NotFound.vue"),
+	},
+	{
+		path: "/server-error",
+		name: "ServerError",
+		component: () => import("@/views/ServerError.vue"),
+	},
 ];
 
 export default guestRoutes;

@@ -32,8 +32,10 @@ AxiosConfig.interceptors.response.use(
 			localStorage.removeItem("token");
 			router.push({ name: "Login" });
 			return response;
-		} else if (error.response.status === 404) {
+		} else if (error.response.status === 404 && !loginStore.getToken) {
 			router.push({ name: "NotFound" });
+		} else if (error.response.status === 500 && !loginStore.getToken) {
+			router.push({ name: "ServerError" });
 		} else if (!error.response) {
 			console.log("Network Error");
 		}

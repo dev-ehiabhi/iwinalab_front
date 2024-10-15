@@ -6,7 +6,7 @@ import AuthApis from "@/services/apis/AuthApis";
 import UserApis from "@/services/apis/UserApis";
 import { useAuthStore } from "@/stores/auth_store";
 import { useUserStore } from "@/stores/modules/user.store";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 const Toast = Swal.mixin({
 	toast: true,
@@ -25,6 +25,7 @@ const _api = UserApis;
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const router = useRouter();
+const route = useRoute();
 
 const items = ref([
 	{
@@ -139,6 +140,7 @@ const logout = () => {
 
 				<RouterLink
 					to="/dashboard"
+					:class="{ 'bg-gray-200': route.name == 'Dashboard' }"
 					class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
 				>
 					<svg
@@ -161,6 +163,7 @@ const logout = () => {
 
 				<RouterLink
 					to="/compliance-tools"
+					:class="{ 'bg-gray-200': route.name == 'ComplianceTools' }"
 					class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
 				>
 					<svg
@@ -185,6 +188,9 @@ const logout = () => {
 
 				<RouterLink
 					to="/training-resources"
+					:class="{
+						'bg-gray-200': route.name == 'TrainingResources',
+					}"
 					v-show="userStore.getUser.role_id == 200"
 					class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
 				>
@@ -241,6 +247,7 @@ const logout = () => {
 
 				<RouterLink
 					to="/my-store/product-list"
+					:class="{ 'bg-gray-200': route.name == 'ProductIndex' }"
 					class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
 				>
 					<svg
@@ -263,6 +270,7 @@ const logout = () => {
 
 				<RouterLink
 					to="/marketplace"
+					:class="{ 'bg-gray-200': route.name == 'Marketplace' }"
 					class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
 				>
 					<svg
@@ -285,6 +293,7 @@ const logout = () => {
 
 				<RouterLink
 					to="/profile"
+					:class="{ 'bg-gray-200': route.name == 'Profile' }"
 					class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
 				>
 					<svg
